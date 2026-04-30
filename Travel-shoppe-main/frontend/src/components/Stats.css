@@ -1,0 +1,96 @@
+/* ─── STATS ─── */
+.stats-section {
+  background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(10,10,10,0) 100%),
+              var(--dark2);
+  padding: 60px 40px;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  perspective: 1000px;
+}
+
+.stats-inner {
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1000px; 
+  margin: 0 auto; 
+  gap: 0;
+  transform-style: preserve-3d;
+}
+
+.stat-item {
+  text-align: center; 
+  padding: 20px;
+  position: relative;
+}
+
+.stat-item-3d {
+  transform-style: preserve-3d;
+}
+
+.stat-divider {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
+}
+
+.stat-item:last-child .stat-divider {
+  display: none;
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px; 
+  font-weight: 300; 
+  color: var(--gold); 
+  line-height: 1;
+  transform: translateZ(20px);
+}
+
+.stat-label {
+  font-size: 10px; 
+  letter-spacing: 3px; 
+  text-transform: uppercase;
+  color: var(--muted); 
+  margin-top: 8px;
+  transform: translateZ(10px);
+}
+
+/* 3D Stats Styles */
+.stat-item-3d {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.stat-divider {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
+}
+
+.stat-item-3d:last-child .stat-divider {
+  display: none;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) .stat-divider,
+  .stat-item:nth-child(4) .stat-divider { display: none; }
+  .stat-item:nth-child(3) .stat-divider,
+  .stat-item:nth-child(4) .stat-divider { display: none; }
+  .stat-item:nth-child(3),
+  .stat-item:nth-child(4) { border-top: 1px solid rgba(201,168,76,0.1); }
+}
+
+@media (max-width: 600px) {
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .stat-num { font-size: 40px; }
+}

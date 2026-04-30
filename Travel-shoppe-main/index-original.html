@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel – Luxury Travel Experiences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: rgba(201,168,76,0.15);
+    --black: #0a0a0a;
+    --dark: #111111;
+    --dark2: #1a1a1a;
+    --text: #e8e0d0;
+    --muted: #8a8070;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    transition: all 0.3s ease;
+  }
+  nav.scrolled {
+    height: 60px;
+    background: rgba(10,10,10,0.98);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  .nav-logo-text { line-height: 1; }
+  .nav-logo-text span:first-child {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; letter-spacing: 2px;
+    color: var(--white);
+  }
+  .nav-logo-text span:last-child {
+    display: block;
+    font-size: 8px; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text); text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold); transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-links .active { color: var(--gold); }
+  .nav-right {
+    display: flex; align-items: center; gap: 20px;
+  }
+  .nav-phone {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: 1px; color: var(--text);
+  }
+  .nav-phone svg { color: var(--gold); }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--black);
+    padding: 10px 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 12px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .btn-outline:hover {
+    background: var(--gold); color: var(--black);
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 1.5px; background: var(--gold);
+    transition: all 0.3s;
+  }
+
+  /* ─── VIDEO STRIP ─── */
+  .video-strip {
+    position: relative; padding: 120px 40px;
+    text-align: center; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-strip-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .video-strip-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,10,10,0.65);
+  }
+  .video-strip-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; height: 100vh; min-height: 600px;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: var(--black);
+  }
+  .hero-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+  .hero-video.loaded { opacity: 1; }
+  .hero-bg-fallback {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1439130490301-25e322d88054?w=1800&q=80');
+    background-size: cover; background-position: center;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(10,10,10,0.85) 0%,
+      rgba(10,10,10,0.6) 50%,
+      rgba(10,10,10,0.2) 100%
+    );
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 80px; max-width: 700px;
+    animation: heroFadeIn 1.2s ease forwards;
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 90px);
+    font-weight: 300; line-height: 1.0;
+    color: var(--white); margin-bottom: 0;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--gold);
+    display: block;
+  }
+  .hero-sub {
+    font-size: 13px; letter-spacing: 1px; line-height: 1.8;
+    color: rgba(232,224,208,0.75);
+    margin: 24px 0 40px;
+    max-width: 380px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+
+  /* Slide indicators */
+  .hero-slides {
+    position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    z-index: 3;
+    display: flex; flex-direction: column; gap: 12px;
+    align-items: center;
+  }
+  .hero-slide-num {
+    font-size: 11px; letter-spacing: 1px; color: var(--muted);
+    cursor: pointer; transition: color 0.2s;
+    writing-mode: unset;
+  }
+  .hero-slide-num.active { color: var(--gold); }
+  .hero-slide-divider {
+    width: 1px; height: 30px; background: rgba(201,168,76,0.3);
+  }
+
+  /* Social sidebar */
+  .hero-social {
+    position: absolute; left: 28px; top: 50%; transform: translateY(-50%);
+    z-index: 3;
+    display: flex; flex-direction: column; gap: 16px; align-items: center;
+  }
+  .hero-social a {
+    width: 34px; height: 34px; border: 1px solid rgba(201,168,76,0.4);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); text-decoration: none;
+    font-size: 13px; transition: all 0.2s;
+  }
+  .hero-social a:hover { background: var(--gold); color: var(--black); }
+
+  /* Scroll cue */
+  .scroll-cue {
+    position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%);
+    z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-cue span {
+    font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+    writing-mode: vertical-rl;
+  }
+  .scroll-cue-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* Watch video */
+  .video-btn {
+    position: absolute; right: 100px; bottom: 50px; z-index: 3;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; text-decoration: none;
+  }
+  .video-btn-circle {
+    width: 50px; height: 50px; border: 1px solid var(--gold);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 16px;
+    transition: background 0.2s;
+  }
+  .video-btn:hover .video-btn-circle { background: var(--gold); color: var(--black); }
+  .video-btn-text { line-height: 1.2; }
+  .video-btn-text span:first-child {
+    display: block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+  }
+  .video-btn-text span:last-child {
+    display: block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+  }
+
+  /* ─── FEATURES BAR ─── */
+  .features-bar {
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .features-inner {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px; margin: 0 auto;
+  }
+  .feature-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 28px 32px;
+    border-right: 1px solid rgba(201,168,76,0.1);
+    transition: background 0.3s;
+  }
+  .feature-item:last-child { border-right: none; }
+  .feature-item:hover { background: rgba(201,168,76,0.05); }
+  .feature-icon {
+    width: 44px; height: 44px; border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 18px; flex-shrink: 0;
+  }
+  .feature-text strong {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--white); margin-bottom: 4px;
+  }
+  .feature-text p { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+  /* ─── DESTINATIONS ─── */
+  .section { padding: 90px 40px; }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-eyebrow {
+    font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .section-eyebrow::before, .section-eyebrow::after {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300; color: var(--white);
+    line-height: 1.1;
+  }
+  .section-title strong { color: var(--gold); font-weight: 400; }
+  .section-sub {
+    font-size: 12px; color: var(--muted); letter-spacing: 1px; margin-top: 12px;
+  }
+  .dest-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .dest-card {
+    position: relative; aspect-ratio: 3/4;
+    overflow: hidden; cursor: pointer;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+  .dest-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.7s ease;
+    display: block;
+  }
+  .dest-card:hover img { transform: scale(1.08); }
+  .dest-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 50%);
+  }
+  .dest-card-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 24px 20px;
+    transform: translateY(0); transition: transform 0.4s;
+  }
+  .dest-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 500; color: var(--white); letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .dest-card-price {
+    font-size: 11px; color: var(--gold); letter-spacing: 1px; margin-top: 4px;
+  }
+  .dest-card-arrow {
+    position: absolute; bottom: 24px; right: 20px;
+    width: 36px; height: 36px; border: 1px solid var(--gold);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 14px;
+    transition: all 0.3s;
+  }
+  .dest-card:hover .dest-card-arrow { background: var(--gold); color: var(--black); }
+
+  /* ─── JOURNEYS FOR YOU ─── */
+  .journeys-section {
+    background: var(--dark2);
+    padding: 80px 40px;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .journey-cats {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+    max-width: 900px; margin: 0 auto;
+  }
+  .journey-cat {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 20px 36px;
+    border-right: 1px solid rgba(201,168,76,0.15);
+    cursor: pointer; transition: all 0.3s;
+  }
+  .journey-cat:last-child { border-right: none; }
+  .journey-cat-icon {
+    width: 48px; height: 48px; border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 20px; transition: all 0.3s;
+  }
+  .journey-cat:hover .journey-cat-icon,
+  .journey-cat.active .journey-cat-icon {
+    background: var(--gold); color: var(--black);
+    border-color: var(--gold);
+  }
+  .journey-cat span {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); text-align: center; transition: color 0.3s;
+  }
+  .journey-cat:hover span, .journey-cat.active span { color: var(--gold); }
+
+  /* ─── FEATURED EXPERIENCE ─── */
+  .featured-section { padding: 90px 40px; }
+  .featured-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .featured-image-wrap { position: relative; }
+  .featured-image {
+    width: 100%; aspect-ratio: 4/5; object-fit: cover;
+    display: block;
+  }
+  .featured-badge {
+    position: absolute; top: 32px; left: -20px;
+    background: var(--gold); color: var(--black);
+    padding: 12px 20px;
+    font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  }
+  .featured-stat-box {
+    position: absolute; bottom: 32px; right: -24px;
+    background: var(--dark2); border: 1px solid rgba(201,168,76,0.2);
+    padding: 20px 28px; min-width: 160px;
+  }
+  .featured-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .featured-stat-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+    margin-top: 4px;
+  }
+  .featured-content { padding-left: 20px; }
+  .featured-content .section-eyebrow { justify-content: flex-start; }
+  .featured-content .section-eyebrow::before { display: none; }
+  .featured-content .section-title { text-align: left; }
+  .featured-content .section-sub { text-align: left; margin-bottom: 32px; }
+  .featured-list { list-style: none; margin-bottom: 40px; }
+  .featured-list li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(201,168,76,0.1);
+    font-size: 12px; color: var(--muted); letter-spacing: 0.5px;
+  }
+  .featured-list li::before {
+    content: ''; display: block; width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* ─── PACKAGES ─── */
+  .packages-section {
+    background: var(--dark2);
+    padding: 90px 40px;
+    border-top: 1px solid rgba(201,168,76,0.08);
+  }
+  .packages-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .pkg-card {
+    background: var(--dark);
+    border: 1px solid rgba(201,168,76,0.1);
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  .pkg-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(201,168,76,0.4);
+  }
+  .pkg-card.featured-pkg { border-color: var(--gold); }
+  .pkg-img {
+    position: relative; aspect-ratio: 16/9; overflow: hidden;
+  }
+  .pkg-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s;
+  }
+  .pkg-card:hover .pkg-img img { transform: scale(1.05); }
+  .pkg-tag {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--gold); color: var(--black);
+    font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 10px;
+  }
+  .pkg-body { padding: 24px; }
+  .pkg-location {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .pkg-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 500; color: var(--white); line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .pkg-desc { font-size: 11px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+  .pkg-meta {
+    display: flex; gap: 16px; margin-bottom: 20px;
+  }
+  .pkg-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; color: var(--muted);
+  }
+  .pkg-meta-item svg { color: var(--gold); }
+  .pkg-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 16px; border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .pkg-price-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .pkg-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 400; color: var(--gold);
+  }
+  .pkg-price span { font-size: 14px; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials-section { padding: 90px 40px; }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .testi-card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 32px;
+    transition: border-color 0.3s;
+  }
+  .testi-card:hover { border-color: rgba(201,168,76,0.3); }
+  .testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+  .testi-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic; font-weight: 300;
+    color: var(--text); line-height: 1.6; margin-bottom: 24px;
+  }
+  .testi-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
+    border: 2px solid rgba(201,168,76,0.3);
+    flex-shrink: 0;
+  }
+  .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .testi-name { font-size: 12px; font-weight: 600; color: var(--white); }
+  .testi-trip { font-size: 10px; color: var(--gold); letter-spacing: 1px; }
+
+  /* ─── STATS ─── */
+  .stats-section {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(10,10,10,0) 100%),
+                var(--dark2);
+    padding: 60px 40px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .stats-inner {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    max-width: 1000px; margin: 0 auto; gap: 0;
+  }
+  .stat-item {
+    text-align: center; padding: 20px;
+    border-right: 1px solid rgba(201,168,76,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-top: 8px;
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-section {
+    position: relative; padding: 120px 40px;
+    text-align: center; overflow: hidden;
+  }
+  .cta-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .cta-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,10,10,0.72);
+  }
+  .cta-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+  .cta-content .section-eyebrow { justify-content: center; }
+  .cta-content .section-title { color: var(--white); margin-bottom: 20px; }
+  .cta-content p {
+    font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 40px;
+  }
+  .cta-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 60px 40px 30px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; max-width: 1200px; margin: 0 auto;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .footer-brand p {
+    font-size: 11px; color: var(--muted); line-height: 1.8; margin: 16px 0 24px;
+    max-width: 280px;
+  }
+  .footer-social { display: flex; gap: 10px; }
+  .footer-social a {
+    width: 34px; height: 34px; border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); text-decoration: none; font-size: 14px;
+    transition: all 0.2s;
+  }
+  .footer-social a:hover { background: var(--gold); color: var(--black); }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a {
+    font-size: 12px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    padding-top: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ─── MOBILE MENU ─── */
+  .mobile-menu {
+    display: none;
+    position: fixed; inset: 0; z-index: 99;
+    background: rgba(10,10,10,0.98);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300; color: var(--text);
+    text-decoration: none; letter-spacing: 2px;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+  .mobile-menu-close {
+    position: absolute; top: 24px; right: 28px;
+    background: none; border: none; color: var(--gold); font-size: 28px; cursor: pointer;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .dest-grid { grid-template-columns: repeat(2, 1fr); }
+    .packages-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-inner { gap: 40px; }
+    .featured-stat-box { right: -8px; }
+  }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-phone { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 60px 0 60px; }
+    .video-btn { display: none; }
+    .features-inner { grid-template-columns: repeat(2, 1fr); }
+    .feature-item:nth-child(2) { border-right: none; }
+    .featured-inner { grid-template-columns: 1fr; }
+    .featured-badge { left: 0; }
+    .featured-stat-box { right: 0; }
+    .featured-content { padding-left: 0; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .stat-item:nth-child(2) { border-right: none; }
+    .stat-item:nth-child(3) { border-right: none; border-top: 1px solid rgba(201,168,76,0.1); }
+    .stat-item:nth-child(4) { border-top: 1px solid rgba(201,168,76,0.1); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .journey-cat { padding: 16px 20px; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero-content { padding: 0 20px; }
+    .hero h1 { font-size: 44px; }
+    .hero-social { display: none; }
+    .hero-slides { display: none; }
+    .section { padding: 60px 20px; }
+    .dest-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .packages-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .features-inner { grid-template-columns: 1fr; }
+    .feature-item { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .journeys-section { padding: 60px 20px; }
+    .journey-cats { flex-direction: column; max-width: 280px; gap: 0; }
+    .journey-cat { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.1); flex-direction: row; justify-content: flex-start; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .packages-section { padding: 60px 20px; }
+    .testimonials-section { padding: 60px 20px; }
+    .featured-section { padding: 60px 20px; }
+    footer { padding: 40px 20px 20px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .btn-outline, .btn-gold { padding: 10px 20px; font-size: 10px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .cta-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+  <a href="#home">Home</a>
+  <a href="#destinations">Destinations</a>
+  <a href="#experiences">Experiences</a>
+  <a href="#packages">Packages</a>
+  <a href="#about">About Us</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <div class="nav-logo-icon"></div>
+    <div class="nav-logo-text">
+      <span>Travel</span>
+      <span>Luxury Travel Experiences</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#experiences">Experiences</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-phone">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"></path></svg>
+      +91 98765 43210
+    </div>
+    <a href="#contact" class="btn-gold">Plan My Trip</a>
+    <div class="hamburger" onclick="openMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.93);align-items:center;justify-content:center;">
+  <button onclick="closeVideo()" style="position:absolute;top:24px;right:32px;background:none;border:none;color:var(--gold);font-size:32px;cursor:pointer;z-index:2;">✕</button>
+  <div style="width:min(900px,90vw);aspect-ratio:16/9;position:relative;">
+    <iframe id="ytFrame" src="" width="100%" height="100%" frameborder="0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen style="border:1px solid rgba(201,168,76,0.3);"></iframe>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-bg-fallback"></div>
+    <!-- Free Pexels video: aerial ocean tropical island -->
+    <video class="hero-video" id="heroVideo" autoplay muted loop playsinline
+      poster="https://images.unsplash.com/photo-1439130490301-25e322d88054?w=1800&q=80">
+      <source src="https://videos.pexels.com/video-files/1739010/1739010-hd_1920_1080_24fps.mp4" type="video/mp4">
+      <source src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_25fps.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <!-- Social -->
+  <div class="hero-social">
+    <a href="#">f</a>
+    <a href="#">in</a>
+    <a href="#">▶</a>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Discover the World</div>
+    <h1>Crafting Journeys<em>Beyond Destinations</em></h1>
+    <p class="hero-sub">Luxury travel curated for the discerning explorer. Extraordinary places. Unforgettable experiences.</p>
+    <div class="hero-actions">
+      <a href="#destinations" class="btn-outline">
+        Explore Journeys
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#packages" class="btn-gold">View Packages</a>
+    </div>
+  </div>
+
+  <!-- Slide numbers -->
+  <div class="hero-slides">
+    <div class="hero-slide-num active">01</div>
+    <div class="hero-slide-divider"></div>
+    <div class="hero-slide-num">02</div>
+    <div class="hero-slide-divider"></div>
+    <div class="hero-slide-num">03</div>
+    <div class="hero-slide-divider"></div>
+    <div class="hero-slide-num">04</div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue">
+    <div class="scroll-cue-line"></div>
+    <span>Scroll to Explore</span>
+  </div>
+
+  <!-- Video -->
+  <a href="#" class="video-btn" onclick="openVideo(event)">
+    <div class="video-btn-circle">▶</div>
+    <div class="video-btn-text">
+      <span>Watch</span>
+      <span>Full Video</span>
+    </div>
+  </a>
+</section>
+
+<!-- FEATURES BAR -->
+<div class="features-bar">
+  <div class="features-inner">
+    <div class="feature-item">
+      <div class="feature-icon">✦</div>
+      <div class="feature-text">
+        <strong>Exclusive Experiences</strong>
+        <p>Handpicked luxury stays & unique experiences</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">◈</div>
+      <div class="feature-text">
+        <strong>Best Price Guarantee</strong>
+        <p>Premium experiences at the best value</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">◉</div>
+      <div class="feature-text">
+        <strong>24/7 Concierge</strong>
+        <p>Round-the-clock support for a worry-free journey</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">❋</div>
+      <div class="feature-text">
+        <strong>Trusted by Travelers</strong>
+        <p>10,000+ happy travelers worldwide</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DESTINATIONS -->
+<section class="section" id="destinations">
+  <div class="section-header">
+    <div class="section-eyebrow">Top Destinations</div>
+    <h2 class="section-title">Explore the <strong>World's Finest</strong></h2>
+    <p class="section-sub">Handcrafted journeys to the world's most extraordinary places</p>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=700&q=85&fit=crop" alt="Maldives" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Maldives</div>
+        <div class="dest-card-price">From ₹1,25,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=700&q=85&fit=crop" alt="Greece" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Greece</div>
+        <div class="dest-card-price">From ₹1,45,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=700&q=85&fit=crop" alt="Switzerland" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Switzerland</div>
+        <div class="dest-card-price">From ₹1,60,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=85&fit=crop" alt="Dubai" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Dubai</div>
+        <div class="dest-card-price">From ₹95,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700&q=85&fit=crop" alt="Bali" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Bali</div>
+        <div class="dest-card-price">From ₹85,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=700&q=85&fit=crop" alt="Japan" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Japan</div>
+        <div class="dest-card-price">From ₹1,75,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=700&q=85&fit=crop" alt="Paris" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Paris</div>
+        <div class="dest-card-price">From ₹1,50,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=700&q=85&fit=crop" alt="Tuscany" loading="lazy">
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-info">
+        <div class="dest-card-name">Tuscany</div>
+        <div class="dest-card-price">From ₹1,30,000</div>
+      </div>
+      <div class="dest-card-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEYS CURATED FOR YOU -->
+<div class="journeys-section" id="experiences">
+  <div class="section-header">
+    <div class="section-eyebrow">Journeys Curated For You</div>
+    <h2 class="section-title">Handcrafted travel experiences <strong>designed around your dreams</strong></h2>
+  </div>
+  <div class="journey-cats">
+    <div class="journey-cat active">
+      <div class="journey-cat-icon">♥</div>
+      <span>Honeymoon Escapes</span>
+    </div>
+    <div class="journey-cat">
+      <div class="journey-cat-icon">⚇</div>
+      <span>Family Holidays</span>
+    </div>
+    <div class="journey-cat">
+      <div class="journey-cat-icon">⚙</div>
+      <span>Adventure & Thrills</span>
+    </div>
+    <div class="journey-cat">
+      <div class="journey-cat-icon">⛩</div>
+      <span>Cultural Experiences</span>
+    </div>
+    <div class="journey-cat">
+      <div class="journey-cat-icon">✦</div>
+      <span>Luxury Getaways</span>
+    </div>
+    <div class="journey-cat">
+      <div class="journey-cat-icon">✈</div>
+      <span>Business Travel</span>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO PARALLAX STRIP -->
+<div class="video-strip">
+  <video class="video-strip-bg" autoplay muted loop playsinline
+    poster="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=70">
+    <source src="https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/1562478/1562478-hd_1920_1080_25fps.mp4" type="video/mp4">
+  </video>
+  <div class="video-strip-overlay"></div>
+  <div class="video-strip-content">
+    <div class="section-eyebrow" style="justify-content:center;">Your Journey Begins</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,72px);font-weight:300;color:#fff;text-align:center;line-height:1.1;">
+      The World is Waiting<br><em style="color:var(--gold);font-style:italic;">Are You?</em>
+    </h2>
+    <a href="#contact" class="btn-outline" style="margin-top:32px;display:inline-flex;align-items:center;gap:10px;">
+      Plan My Journey
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- FEATURED EXPERIENCE -->
+<section class="featured-section" id="about">
+  <div class="featured-inner">
+    <div class="featured-image-wrap">
+      <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=900&q=85&fit=crop" alt="Luxury Hotel" class="featured-image" loading="lazy">
+      <div class="featured-badge">Since 2010</div>
+      <div class="featured-stat-box">
+        <div class="featured-stat-num">10K+</div>
+        <div class="featured-stat-label">Happy Travelers</div>
+      </div>
+    </div>
+    <div class="featured-content">
+      <div class="section-eyebrow">Why Travel</div>
+      <h2 class="section-title">Where Luxury Meets <strong>Authentic Discovery</strong></h2>
+      <p class="section-sub">We don't just book trips — we craft personalised journeys that transform the way you experience the world.</p>
+      <ul class="featured-list">
+        <li>Personally curated luxury itineraries tailored to your desires</li>
+        <li>Access to exclusive properties and private experiences worldwide</li>
+        <li>Dedicated travel concierge available 24 hours a day</li>
+        <li>Seamless end-to-end travel management from flights to villas</li>
+        <li>Over 150+ handpicked destinations across 6 continents</li>
+      </ul>
+      <a href="#contact" class="btn-outline">
+        Start Planning
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="packages-section" id="packages">
+  <div class="section-header">
+    <div class="section-eyebrow">Curated Packages</div>
+    <h2 class="section-title">Signature <strong>Travel Experiences</strong></h2>
+    <p class="section-sub">Choose from our most-loved luxury packages</p>
+  </div>
+  <div class="packages-grid">
+    <div class="pkg-card featured-pkg">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=700&q=85&fit=crop" alt="Maldives Overwater Villa" loading="lazy">
+        <div class="pkg-tag">Most Popular</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-location">Maldives</div>
+        <div class="pkg-name">Overwater Bungalow Escape</div>
+        <p class="pkg-desc">Wake up above the turquoise lagoon in a private overwater villa. Snorkel with manta rays, dine under the stars on your own deck.</p>
+        <div class="pkg-meta">
+          <div class="pkg-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            7 Nights
+          </div>
+          <div class="pkg-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            2 Adults
+          </div>
+          <div class="pkg-meta-item">
+            ✈ All Inclusive
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div>
+            <div class="pkg-price-label">Starting from</div>
+            <div class="pkg-price"><span>₹</span>1,25,000</div>
+          </div>
+          <a href="#contact" class="btn-gold">Book Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=700&q=85&fit=crop" alt="Greece Santorini" loading="lazy">
+        <div class="pkg-tag">Romantic</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-location">Greece</div>
+        <div class="pkg-name">Santorini Sunset Romance</div>
+        <p class="pkg-desc">Drift through whitewashed villages, sip volcanic wines and watch the legendary Oia sunset paint the sky in gold.</p>
+        <div class="pkg-meta">
+          <div class="pkg-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            6 Nights
+          </div>
+          <div class="pkg-meta-item">
+            ✈ Flights Included
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div>
+            <div class="pkg-price-label">Starting from</div>
+            <div class="pkg-price"><span>₹</span>1,45,000</div>
+          </div>
+          <a href="#contact" class="btn-gold">Book Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=700&q=85&fit=crop" alt="Switzerland Alps" loading="lazy">
+        <div class="pkg-tag">Adventure</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-location">Switzerland</div>
+        <div class="pkg-name">Alpine Luxury & Glacier Trail</div>
+        <p class="pkg-desc">Stay in a chalet perched above the clouds. Ski pristine powder, ride the Glacier Express and indulge in Swiss fondue evenings.</p>
+        <div class="pkg-meta">
+          <div class="pkg-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            8 Nights
+          </div>
+          <div class="pkg-meta-item">
+            ✈ Visa Assistance
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div>
+            <div class="pkg-price-label">Starting from</div>
+            <div class="pkg-price"><span>₹</span>1,60,000</div>
+          </div>
+          <a href="#contact" class="btn-gold">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Happy Travelers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">150+</div>
+      <div class="stat-label">Destinations</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">15</div>
+      <div class="stat-label">Years of Excellence</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Client Satisfaction</div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="section-header">
+    <div class="section-eyebrow">Traveler Stories</div>
+    <h2 class="section-title">Words from <strong>Our Explorers</strong></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"Travel turned our honeymoon into a fairy tale. Every single detail was perfect — from the overwater villa in the Maldives to the private sunset dinner."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Priya S">
+        </div>
+        <div>
+          <div class="testi-name">Priya & Rohan Sharma</div>
+          <div class="testi-trip">Maldives Honeymoon</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"The Switzerland trip was beyond imagination. The team thought of everything — private transfers, hidden gems we'd never have found alone, impeccable hotels."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Arjun M">
+        </div>
+        <div>
+          <div class="testi-name">Arjun Mehta</div>
+          <div class="testi-trip">Swiss Alps Adventure</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"Our family trip to Greece was smooth, fun, and absolutely magical. The kids loved every moment and the concierge was available at any hour for support."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Meera K">
+        </div>
+        <div>
+          <div class="testi-name">Meera & Family Kapoor</div>
+          <div class="testi-trip">Greece Family Holiday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <video class="cta-video" autoplay muted loop playsinline
+    poster="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=70">
+    <source src="https://videos.pexels.com/video-files/4782931/4782931-hd_1920_1080_25fps.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_25fps.mp4" type="video/mp4">
+  </video>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="section-eyebrow">Ready to Explore?</div>
+    <h2 class="section-title">Let's Plan Your <strong>Dream Journey</strong></h2>
+    <p>Tell us where you want to go, and our expert travel designers will craft a bespoke experience just for you. No cookie-cutter packages — only pure, personalised luxury.</p>
+    <div class="cta-actions">
+      <a href="tel:+919876543210" class="btn-outline">
+        Call +91 98765 43210
+      </a>
+      <a href="mailto:hello@travelshoppe.in" class="btn-gold">Send Enquiry</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="nav-logo" style="text-decoration:none;">
+        <div class="nav-logo-icon"></div>
+        <div class="nav-logo-text">
+          <span>Travel</span>
+          <span>Luxury Travel Experiences</span>
+        </div>
+      </a>
+      <p>We craft extraordinary journeys for the discerning traveler. From intimate island escapes to grand European adventures — every trip is a masterpiece.</p>
+      <div class="footer-social">
+        <a href="#">f</a>
+        <a href="#">in</a>
+        <a href="#">▶</a>
+        <a href="#">✦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Destinations</h4>
+      <ul>
+        <li><a href="#">Maldives</a></li>
+        <li><a href="#">Greece</a></li>
+        <li><a href="#">Switzerland</a></li>
+        <li><a href="#">Dubai</a></li>
+        <li><a href="#">Bali</a></li>
+        <li><a href="#">Japan</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Experiences</h4>
+      <ul>
+        <li><a href="#">Honeymoon</a></li>
+        <li><a href="#">Family Holidays</a></li>
+        <li><a href="#">Adventure</a></li>
+        <li><a href="#">Cultural Tours</a></li>
+        <li><a href="#">Luxury Getaways</a></li>
+        <li><a href="#">Business Travel</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+        <li><a href="mailto:hello@travelshoppe.in">hello@travelshoppe.in</a></li>
+        <li><a href="#">Hyderabad, India</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Travel. All rights reserved. Crafted with passion for luxury travel.</p>
+    <p style="color:var(--gold);">Luxury Travel Experiences Since 2010</p>
+  </div>
+</footer>
+
+<script>
+  // Hero video fade-in once loaded
+  const heroVideo = document.getElementById('heroVideo');
+  if (heroVideo) {
+    heroVideo.addEventListener('canplay', () => {
+      heroVideo.classList.add('loaded');
+    });
+    // Fallback: show after 3s if canplay hasn't fired
+    setTimeout(() => heroVideo.classList.add('loaded'), 3000);
+  }
+
+  // Video modal
+  function openVideo(e) {
+    e.preventDefault();
+    const modal = document.getElementById('videoModal');
+    document.getElementById('ytFrame').src = 'https://www.youtube.com/embed/oHkZFQjIBZs?autoplay=1&rel=0';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideo() {
+    document.getElementById('videoModal').style.display = 'none';
+    document.getElementById('ytFrame').src = '';
+    document.body.style.overflow = '';
+  }
+  document.getElementById('videoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVideo();
+  });
+
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  function openMobileMenu() {
+    document.getElementById('mobileMenu').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('#mobileMenu a').forEach(a => {
+    a.addEventListener('click', closeMobileMenu);
+  });
+
+  // Journey category tabs
+  document.querySelectorAll('.journey-cat').forEach(cat => {
+    cat.addEventListener('click', () => {
+      document.querySelectorAll('.journey-cat').forEach(c => c.classList.remove('active'));
+      cat.classList.add('active');
+    });
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // Intersection observer fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.dest-card, .pkg-card, .testi-card, .feature-item, .journey-cat').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

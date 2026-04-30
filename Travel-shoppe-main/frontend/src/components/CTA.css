@@ -1,0 +1,226 @@
+/* ─── 3D CTA SECTION ─── */
+.cta-section-3d {
+  position: relative;
+  padding: 120px 40px;
+  text-align: center;
+  overflow: hidden;
+  perspective: 1500px;
+}
+
+.cta-video-3d {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 110%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.cta-overlay-3d {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,10,0.9) 0%,
+    rgba(10,10,10,0.7) 50%,
+    rgba(10,10,10,0.9) 100%
+  );
+  z-index: 1;
+}
+
+.cta-content-3d {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+}
+
+.cta-content-3d .section-eyebrow {
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.cta-content-3d .section-title {
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+.cta-content-3d > p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+/* 3D Form styling */
+.contact-form-3d {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 32px;
+  transform-style: preserve-3d;
+}
+
+.form-row-3d {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field-3d {
+  transform-style: preserve-3d;
+}
+
+.form-field-3d input,
+.form-field-3d textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 16px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+.form-field-3d input:focus,
+.form-field-3d textarea:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 20px rgba(201,168,76,0.1);
+  transform: translateZ(10px);
+}
+
+.form-field-3d input::placeholder,
+.form-field-3d textarea::placeholder {
+  color: var(--muted);
+}
+
+.form-field-3d textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* CTA Actions */
+.cta-actions-3d {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  transform-style: preserve-3d;
+}
+
+/* Magnetic button styling */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.magnetic-btn:hover::before {
+  opacity: 1;
+}
+
+/* Pulse animation for submit button */
+.cta-btn-animate {
+  position: relative;
+}
+
+.cta-btn-animate::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--gold);
+  border-radius: 50px;
+  opacity: 0;
+  animation: submitPulse 2s ease-out infinite;
+}
+
+@keyframes submitPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+.submit-message {
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  transform: translateZ(30px);
+}
+
+.submit-message.success {
+  background: rgba(201,168,76,0.15);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+
+.submit-message.error {
+  background: rgba(255,107,107,0.15);
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+}
+
+/* Button hover lift */
+.cta-btn-animate {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cta-btn-animate:hover {
+  transform: translateY(-2px) translateZ(10px);
+  box-shadow: 0 10px 30px rgba(201,168,76,0.3);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .cta-section-3d { padding: 80px 20px; }
+  .form-row-3d { grid-template-columns: 1fr; }
+  .cta-actions-3d { flex-direction: column; align-items: center; }
+  .cta-btn-animate { width: 100%; max-width: 300px; }
+}
+
+@media (max-width: 480px) {
+  .cta-content-3d .section-title { font-size: 28px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cta-video-3d {
+    transform: none !important;
+  }
+  
+  .form-field-3d input,
+  .form-field-3d textarea {
+    transform: none !important;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  
+  .cta-btn-animate::after {
+    animation: none;
+  }
+}

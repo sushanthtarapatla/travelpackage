@@ -1,0 +1,109 @@
+/* ─── FEATURED EXPERIENCE ─── */
+.featured-section { padding: 90px 40px; }
+
+.featured-inner {
+  max-width: 1280px; 
+  margin: 0 auto;
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 60px; 
+  align-items: center;
+}
+
+.featured-image-wrap { position: relative; }
+
+.featured-image {
+  width: 100%; 
+  aspect-ratio: 4/5; 
+  object-fit: cover;
+  display: block;
+}
+
+.featured-badge {
+  position: absolute; 
+  top: 32px; 
+  left: -20px;
+  background: var(--gold); 
+  color: var(--black);
+  padding: 12px 20px;
+  font-size: 10px; 
+  font-weight: 700; 
+  letter-spacing: 3px; 
+  text-transform: uppercase;
+}
+
+.featured-stat-box {
+  position: absolute; 
+  bottom: 32px; 
+  right: -24px;
+  background: var(--dark2); 
+  border: 1px solid rgba(201,168,76,0.2);
+  padding: 20px 28px; 
+  min-width: 160px;
+}
+
+.featured-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; 
+  font-weight: 300; 
+  color: var(--gold); 
+  line-height: 1;
+}
+
+.featured-stat-label {
+  font-size: 9px; 
+  letter-spacing: 3px; 
+  text-transform: uppercase; 
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.featured-content { padding-left: 20px; }
+
+.featured-content .section-eyebrow { justify-content: flex-start; }
+.featured-content .section-eyebrow::before { display: none; }
+.featured-content .section-title { text-align: left; }
+.featured-content .section-sub { text-align: left; margin-bottom: 32px; }
+
+.featured-list { list-style: none; margin-bottom: 40px; }
+
+.featured-list li {
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  padding: 10px 0; 
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  font-size: 12px; 
+  color: var(--muted); 
+  letter-spacing: 0.5px;
+}
+
+.featured-list li::before {
+  content: ''; 
+  display: block; 
+  width: 6px; 
+  height: 6px;
+  background: var(--gold); 
+  border-radius: 50%; 
+  flex-shrink: 0;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .featured-inner { gap: 40px; }
+  .featured-stat-box { right: -8px; }
+}
+
+@media (max-width: 900px) {
+  .featured-inner { grid-template-columns: 1fr; }
+  .featured-badge { left: 0; }
+  .featured-stat-box { right: 0; }
+  .featured-content { padding-left: 0; }
+}
+
+@media (max-width: 600px) {
+  .featured-section { padding: 60px 20px; }
+  .featured-badge { left: 0; top: 20px; padding: 8px 16px; font-size: 9px; }
+  .featured-stat-box { right: 0; bottom: 20px; padding: 16px 20px; min-width: 140px; }
+  .featured-stat-num { font-size: 36px; }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "travel-shoppe",
+  "version": "1.0.0",
+  "description": "Travel - Luxury Travel Experiences (React + Node.js + MongoDB)",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "start": "cd backend && npm start",
+    "build": "cd frontend && npm run build",
+    "seed": "cd backend && npm run seed"
+  },
+  "keywords": [
+    "travel",
+    "mern",
+    "react",
+    "nodejs",
+    "mongodb",
+    "luxury"
+  ],
+  "author": "Travel",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
