@@ -1,0 +1,65 @@
+.booking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.booking-modal {
+  width: min(520px, 100%);
+  background: #111;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 18px;
+  position: relative;
+}
+
+.booking-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.booking-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.booking-form input {
+  padding: 10px 12px;
+  border: 1px solid #2b2b2b;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.people-stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.people-stepper div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.people-stepper button {
+  width: 28px;
+  height: 28px;
+}
+
+.booking-message {
+  color: var(--gold);
+  margin: 8px 0 0;
+}

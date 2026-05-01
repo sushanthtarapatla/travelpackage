@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { submitContact } from '../services/api';
+import { useEffect, useState } from 'react';
+import { createBooking } from '../services/api';
 import './CTA.css';
 
 const CTA = () => {
@@ -7,13 +7,28 @@ const CTA = () => {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    destination: '',
+    travelDate: '',
+    people: 1
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
+  useEffect(() => {
+    const handlePrefillDestination = (event) => {
+      setFormData((prev) => ({
+        ...prev,
+        destination: event.detail?.destination || prev.destination
+      }));
+    };
+
+    window.addEventListener('prefill-booking-destination', handlePrefillDestination);
+    return () => window.removeEventListener('prefill-booking-destination', handlePrefillDestination);
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: name === 'people' ? Number(value) : value });
   };
 
   const handleSubmit = async (e) => {
@@ -22,11 +37,18 @@ const CTA = () => {
     setSubmitMessage('');
     
     try {
-      const response = await submitContact(formData);
-      setSubmitMessage(response.message);
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      await createBooking(formData);
+      setSubmitMessage('Booking created successfully.');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        destination: '',
+        travelDate: '',
+        people: 1
+      });
     } catch (error) {
-      setSubmitMessage('Error submitting form. Please try again.');
+      setSubmitMessage(error?.response?.data?.message || 'Error submitting booking. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +71,7 @@ const CTA = () => {
       <div className="cta-content">
         <div className="section-eyebrow">Ready to Explore?</div>
         <h2 className="section-title">Let's Plan Your <strong>Dream Journey</strong></h2>
-        <p>Tell us where you want to go, and our expert travel designers will craft a bespoke experience just for you. No cookie-cutter packages — only pure, personalised luxury.</p>
+        <p>Book your trip in a few steps. Our team will contact you with final confirmation and trip details.</p>
         
         {submitMessage && (
           <div className={`submit-message ${submitMessage.includes('Error') ? 'error' : 'success'}`}>
@@ -82,21 +104,40 @@ const CTA = () => {
             placeholder="Phone Number"
             value={formData.phone}
             onChange={handleChange}
+            required
           />
-          <textarea
-            name="message"
-            placeholder="Tell us about your dream trip..."
-            rows="4"
-            value={formData.message}
+          <div className="form-row">
+            <input
+              type="text"
+              name="destination"
+              placeholder="Destination"
+              value={formData.destination}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="date"
+              name="travelDate"
+              value={formData.travelDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <input
+            type="number"
+            name="people"
+            placeholder="Number of People"
+            min="1"
+            value={formData.people}
             onChange={handleChange}
             required
-          ></textarea>
+          />
           <div className="cta-actions">
             <a href="tel:+919876543210" className="btn-outline">
               Call +91 81421 89138
             </a>
             <button type="submit" className="btn-gold" disabled={submitting}>
-              {submitting ? 'Sending...' : 'Send Enquiry'}
+              {submitting ? 'Booking...' : 'Confirm Booking'}
             </button>
           </div>
         </form>

@@ -62,4 +62,59 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @desc    Update destination by id
+// @route   PUT /api/destinations/:id
+router.put('/:id', async (req, res) => {
+  try {
+    const destination = await Destination.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!destination) {
+      return res.status(404).json({
+        success: false,
+        message: 'Destination not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: destination
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @desc    Delete destination by id
+// @route   DELETE /api/destinations/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const destination = await Destination.findById(req.params.id);
+
+    if (!destination) {
+      return res.status(404).json({
+        success: false,
+        message: 'Destination not found'
+      });
+    }
+
+    await destination.deleteOne();
+
+    res.json({
+      success: true,
+      message: 'Destination deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;

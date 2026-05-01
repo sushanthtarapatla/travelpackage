@@ -28,6 +28,14 @@ const destinationSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  duration: {
+    type: String,
+    default: ''
+  },
+  itinerary: {
+    type: [String],
+    default: []
+  },
   featured: {
     type: Boolean,
     default: false

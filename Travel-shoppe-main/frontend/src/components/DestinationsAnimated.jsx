@@ -1,16 +1,67 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useDestinations } from '../hooks/useApi';
+import { useDestinations, usePackages } from '../hooks/useApi';
+import { itineraries } from '../data/itineraries';
 import './Destinations.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const DestinationsAnimated = () => {
   const { destinations, loading, error } = useDestinations();
+  const { packages } = usePackages();
   const sectionRef = useRef(null);
   const gridRef = useRef(null);
   const headerRef = useRef(null);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
+
+  const fallbackItineraryMap = useMemo(() => {
+    return itineraries.reduce((acc, item) => {
+      acc[item.name.toLowerCase()] = item;
+      return acc;
+    }, {});
+  }, []);
+
+  const packageByLocation = useMemo(() => {
+    return (packages || []).reduce((acc, item) => {
+      const key = (item.location || '').toLowerCase();
+      if (key && !acc[key]) acc[key] = item;
+      return acc;
+    }, {});
+  }, [packages]);
+
+  const destinationByName = useMemo(() => {
+    return (destinations || []).reduce((acc, item) => {
+      const key = (item.name || '').toLowerCase();
+      if (key) acc[key] = item;
+      return acc;
+    }, {});
+  }, [destinations]);
+
+  const handleOpenItinerary = (destinationName) => {
+    const key = (destinationName || '').toLowerCase();
+    const destinationData = destinationByName[key];
+    const packageData = packageByLocation[key];
+    const fallback = fallbackItineraryMap[key];
+    setSelectedItinerary({
+      name: destinationName,
+      duration: destinationData?.duration || packageData?.duration || fallback?.duration || '',
+      itinerary:
+        Array.isArray(destinationData?.itinerary) && destinationData.itinerary.length
+          ? destinationData.itinerary
+          : Array.isArray(packageData?.itinerary) && packageData.itinerary.length
+          ? packageData.itinerary
+          : fallback?.itinerary || []
+    });
+  };
+
+  const handleBookNowClick = (destination) => {
+    window.dispatchEvent(
+      new CustomEvent('open-booking-modal', {
+        detail: { destination }
+      })
+    );
+  };
 
   useEffect(() => {
     if (!destinations.length) return;
@@ -234,10 +285,57 @@ const DestinationsAnimated = () => {
             <div className="dest-card-info">
               <div className="dest-card-name">{destination.name}</div>
             </div>
-            <div className="dest-card-arrow">→</div>
+            <button
+              type="button"
+              className="dest-card-arrow"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpenItinerary(destination.name);
+              }}
+            >
+              →
+            </button>
+            <button
+              type="button"
+              className="dest-card-book"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleBookNowClick(destination.name);
+              }}
+            >
+              Book
+            </button>
           </div>
         ))}
       </div>
+      {selectedItinerary ? (
+        <div className="itinerary-modal-overlay" onClick={() => setSelectedItinerary(null)}>
+          <div className="itinerary-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="itinerary-close"
+              onClick={() => setSelectedItinerary(null)}
+            >
+              x
+            </button>
+            <h3>{selectedItinerary.name}</h3>
+            <p className="itinerary-duration">{selectedItinerary.duration}</p>
+            <ul className="itinerary-list">
+              {selectedItinerary.itinerary.map((dayPlan, idx) => (
+                <li key={`${selectedItinerary.name}-${idx}`}>{dayPlan}</li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              className="btn-gold"
+              style={{ marginTop: '12px' }}
+              onClick={() => handleBookNowClick(selectedItinerary.name)}
+            >
+              Book This Trip
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };

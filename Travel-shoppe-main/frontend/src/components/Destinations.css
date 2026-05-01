@@ -94,6 +94,22 @@
   transform: translateZ(40px);
   background: rgba(10,10,10,0.3);
   backdrop-filter: blur(4px);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.dest-card-book {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.45);
+  color: var(--gold);
+  font-size: 11px;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 6;
 }
 
 /* Gold shimmer on hover */
@@ -184,4 +200,48 @@
     animation: none;
     border-top-color: rgba(201,168,76,0.5);
   }
+}
+
+.itinerary-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.itinerary-modal {
+  width: min(680px, 100%);
+  background: #101010;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 14px;
+  padding: 20px;
+  color: #fff;
+  position: relative;
+}
+
+.itinerary-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.itinerary-duration {
+  color: var(--gold);
+  margin: 8px 0 14px;
+}
+
+.itinerary-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: var(--text);
 }

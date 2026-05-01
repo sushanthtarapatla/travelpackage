@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePackages } from '../hooks/useApi';
+import { itineraries } from '../data/itineraries';
 import './PackagesAnimated.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +12,35 @@ const PackagesAnimated = () => {
   const sectionRef = useRef(null);
   const gridRef = useRef(null);
   const headerRef = useRef(null);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
+
+  const itineraryMap = useMemo(() => {
+    return itineraries.reduce((acc, item) => {
+      acc[item.name.toLowerCase()] = item;
+      return acc;
+    }, {});
+  }, []);
+
+  const handleBookNowClick = (destination) => {
+    window.dispatchEvent(
+      new CustomEvent('open-booking-modal', {
+        detail: { destination }
+      })
+    );
+  };
+
+  const handleViewItinerary = (pkg) => {
+    const destinationName = pkg.location || '';
+    const fallback = itineraryMap[destinationName.toLowerCase()];
+    setSelectedItinerary({
+      name: destinationName,
+      duration: pkg.duration || fallback?.duration || '',
+      itinerary:
+        Array.isArray(pkg.itinerary) && pkg.itinerary.length
+          ? pkg.itinerary
+          : fallback?.itinerary || []
+    });
+  };
 
   useEffect(() => {
     if (!packages.length) return;
@@ -241,7 +271,7 @@ const PackagesAnimated = () => {
       </div>
       
       <div className="packages-grid-3d" ref={gridRef}>
-        {packages.map((pkg, index) => (
+        {packages.map((pkg) => (
           <div 
             className={`pkg-card-3d ${pkg.featured ? 'featured-pkg' : ''}`}
             key={pkg._id || pkg.slug}
@@ -280,12 +310,50 @@ const PackagesAnimated = () => {
                 ))}
               </div>
               <div className="pkg-footer">
-                <a href="#contact" className="btn-gold magnetic-btn">Book Now</a>
+                <div className="pkg-actions">
+                  <button
+                    type="button"
+                    className="btn-outline itinerary-btn"
+                    onClick={() => handleViewItinerary(pkg)}
+                  >
+                    View Itinerary
+                  </button>
+                  <a
+                    href="#"
+                    className="btn-gold magnetic-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleBookNowClick(pkg.location);
+                    }}
+                  >
+                    Book Now
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      {selectedItinerary ? (
+        <div className="itinerary-modal-overlay" onClick={() => setSelectedItinerary(null)}>
+          <div className="itinerary-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="itinerary-close"
+              onClick={() => setSelectedItinerary(null)}
+            >
+              x
+            </button>
+            <h3>{selectedItinerary.name}</h3>
+            <p className="itinerary-duration">{selectedItinerary.duration}</p>
+            <ul className="itinerary-list">
+              {selectedItinerary.itinerary.map((dayPlan, idx) => (
+                <li key={`${selectedItinerary.name}-${idx}`}>{dayPlan}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -14,6 +15,9 @@ import StatsAnimated from './components/StatsAnimated'
 import TestimonialsAnimated from './components/TestimonialsAnimated'
 import CTAAnimated from './components/CTAAnimated'
 import Footer from './components/Footer'
+import AdminLogin from './components/AdminLogin'
+import AdminDashboard from './components/AdminDashboard'
+import BookingModal from './components/BookingModal'
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger)
@@ -33,7 +37,7 @@ function App() {
     }
   }, [])
 
-  return (
+  const HomePage = () => (
     <div className="app">
       <Navbar />
       <main>
@@ -49,7 +53,28 @@ function App() {
         <CTAAnimated />
       </main>
       <Footer />
+      <BookingModal />
     </div>
+  )
+
+  const ProtectedRoute = ({ children }) => {
+    const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true'
+    return isAdminLoggedIn ? children : <Navigate to="/admin/login" replace />
+  }
+
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   )
 }
 

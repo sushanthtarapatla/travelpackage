@@ -28,6 +28,10 @@ const packageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  itinerary: {
+    type: [String],
+    default: []
+  },
   duration: {
     type: String,
     default: ''

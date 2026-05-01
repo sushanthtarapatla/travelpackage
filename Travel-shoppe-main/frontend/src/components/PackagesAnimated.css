@@ -132,6 +132,17 @@
   border-top: 1px solid rgba(201,168,76,0.1);
 }
 
+.pkg-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.itinerary-btn {
+  padding: 10px 14px;
+  font-size: 11px;
+}
+
 .pkg-price-label {
   font-size: 10px; 
   color: var(--muted); 
@@ -216,6 +227,14 @@
   .pkg-img { height: 200px; }
   .pkg-name { font-size: 20px; }
   .pkg-price { font-size: 24px; }
+  .pkg-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .pkg-actions {
+    width: 100%;
+  }
 }
 
 /* Reduced motion support */
@@ -228,4 +247,48 @@
   .pkg-tag {
     animation: none !important;
   }
+}
+
+.itinerary-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.itinerary-modal {
+  width: min(680px, 100%);
+  background: #101010;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 14px;
+  padding: 20px;
+  color: #fff;
+  position: relative;
+}
+
+.itinerary-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.itinerary-duration {
+  color: var(--gold);
+  margin: 8px 0 14px;
+}
+
+.itinerary-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: var(--text);
 }

@@ -80,4 +80,63 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @desc    Update package by id
+// @route   PUT /api/packages/:id
+router.put('/:id', async (req, res) => {
+  try {
+    const packageItem = await Package.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!packageItem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Package not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: packageItem
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @desc    Delete package by id
+// @route   DELETE /api/packages/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const packageItem = await Package.findById(req.params.id);
+
+    if (!packageItem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Package not found'
+      });
+    }
+
+    await packageItem.deleteOne();
+
+    res.json({
+      success: true,
+      message: 'Package deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;

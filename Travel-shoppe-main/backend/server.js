@@ -7,6 +7,9 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
+if (!process.env.MONGODB_URI) {
+  console.warn('MONGODB_URI not found in environment. Falling back to local MongoDB.');
+}
 connectDB();
 
 // Route files
@@ -15,6 +18,7 @@ const packages = require('./routes/packages');
 const testimonials = require('./routes/testimonials');
 const journeyCategories = require('./routes/journeyCategories');
 const contacts = require('./routes/contacts');
+const bookings = require('./routes/bookings');
 
 const app = express();
 
@@ -35,6 +39,7 @@ app.use('/api/packages', packages);
 app.use('/api/testimonials', testimonials);
 app.use('/api/journey-categories', journeyCategories);
 app.use('/api/contacts', contacts);
+app.use('/api/bookings', bookings);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -56,6 +61,7 @@ app.get('/', (req, res) => {
       testimonials: '/api/testimonials',
       journeyCategories: '/api/journey-categories',
       contacts: '/api/contacts',
+      bookings: '/api/bookings',
       health: '/api/health'
     }
   });

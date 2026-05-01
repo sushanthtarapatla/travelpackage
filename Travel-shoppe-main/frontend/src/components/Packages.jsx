@@ -1,10 +1,41 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePackages } from '../hooks/useApi';
+import { itineraries } from '../data/itineraries';
 import './Packages.css';
 
 const Packages = () => {
   const { packages, loading, error } = usePackages();
   const sectionRef = useRef(null);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
+
+  const itineraryMap = useMemo(() => {
+    return itineraries.reduce((acc, item) => {
+      acc[item.name.toLowerCase()] = item;
+      return acc;
+    }, {});
+  }, []);
+
+  const handleBookNowClick = (destination) => {
+    window.dispatchEvent(
+      new CustomEvent('prefill-booking-destination', {
+        detail: { destination }
+      })
+    );
+  };
+
+  const handleViewItinerary = (pkg) => {
+    const destinationName = pkg.location || '';
+    const fallback = itineraryMap[destinationName.toLowerCase()];
+    const selected = {
+      name: destinationName,
+      duration: pkg.duration || fallback?.duration || '',
+      itinerary:
+        Array.isArray(pkg.itinerary) && pkg.itinerary.length
+          ? pkg.itinerary
+          : fallback?.itinerary || []
+    };
+    setSelectedItinerary(selected);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -30,6 +61,17 @@ const Packages = () => {
 
   if (loading) return <div className="loading">Loading packages...</div>;
   if (error) return <div className="error">Error: {error}</div>;
+  if (!packages?.length) {
+    return (
+      <section className="packages-section" id="packages" ref={sectionRef}>
+        <div className="section-header">
+          <div className="section-eyebrow">Curated Packages</div>
+          <h2 className="section-title">Signature <strong>Travel Experiences</strong></h2>
+          <p className="section-sub">Trips will appear here once packages are added.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="packages-section" id="packages" ref={sectionRef}>
@@ -82,12 +124,47 @@ const Packages = () => {
                   <div className="pkg-price-label">Starting from</div>
                   <div className="pkg-price"><span>₹</span>{pkg.priceValue?.toLocaleString()}</div>
                 </div>
-                <a href="#contact" className="btn-gold">Book Now</a>
+                <div className="pkg-actions">
+                  <button
+                    type="button"
+                    className="btn-outline itinerary-btn"
+                    onClick={() => handleViewItinerary(pkg)}
+                  >
+                    View Itinerary
+                  </button>
+                  <a
+                    href="#contact"
+                    className="btn-gold"
+                    onClick={() => handleBookNowClick(pkg.location)}
+                  >
+                    Book Now
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      {selectedItinerary ? (
+        <div className="itinerary-modal-overlay" onClick={() => setSelectedItinerary(null)}>
+          <div className="itinerary-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="itinerary-close"
+              onClick={() => setSelectedItinerary(null)}
+            >
+              x
+            </button>
+            <h3>{selectedItinerary.name}</h3>
+            <p className="itinerary-duration">{selectedItinerary.duration}</p>
+            <ul className="itinerary-list">
+              {selectedItinerary.itinerary.map((dayPlan, idx) => (
+                <li key={`${selectedItinerary.name}-${idx}`}>{dayPlan}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };
