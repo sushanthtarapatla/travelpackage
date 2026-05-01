@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
+const Notification = require('../models/Notification');
 
 // @desc    Get all contacts (admin)
 // @route   GET /api/contacts
@@ -25,6 +26,18 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const contact = await Contact.create(req.body);
+
+    // Auto-create admin notification (non-blocking — don't fail contact save if this errors)
+    try {
+      await Notification.create({
+        type: 'contact',
+        message: `New enquiry from ${contact.name} (${contact.email})${contact.destination ? ' — Interested in: ' + contact.destination : ''}`,
+        refId: contact._id.toString()
+      });
+    } catch (notifErr) {
+      console.error('Notification create failed:', notifErr.message);
+    }
+
     res.status(201).json({
       success: true,
       message: 'Thank you for your enquiry. We will contact you soon!',

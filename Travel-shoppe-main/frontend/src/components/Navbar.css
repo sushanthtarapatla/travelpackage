@@ -158,6 +158,22 @@ nav.scrolled {
   cursor: pointer;
 }
 
+.mobile-menu-btn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; 
+  font-weight: 300; 
+  color: var(--text);
+  background: none;
+  border: none;
+  text-decoration: none; 
+  letter-spacing: 2px;
+  transition: color 0.2s;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-menu-btn:hover { color: var(--gold); }
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 900px) {
   .nav-links { display: none; }

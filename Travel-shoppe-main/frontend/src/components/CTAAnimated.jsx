@@ -151,7 +151,9 @@ const CTAAnimated = () => {
         { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }
       );
     } catch (error) {
-      setSubmitMessage('Error submitting form. Please try again.');
+      console.error('Contact form error:', error?.response?.data || error.message || error);
+      const errMsg = error?.response?.data?.message || 'Error submitting form. Please try again.';
+      setSubmitMessage(errMsg);
     } finally {
       setSubmitting(false);
     }

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import UserCancellation from './UserCancellation';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [cancellationModalOpen, setCancellationModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,14 +53,23 @@ const Navbar = () => {
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
         <button className="mobile-menu-close" onClick={closeMobileMenu}>✕</button>
         {navLinks.map(link => (
-          <a 
-            key={link.id} 
-            href={`#${link.id}`} 
+          <a
+            key={link.id}
+            href={`#${link.id}`}
             onClick={closeMobileMenu}
           >
             {link.label}
           </a>
         ))}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => {
+            closeMobileMenu();
+            setCancellationModalOpen(true);
+          }}
+        >
+          Cancel Trip
+        </button>
       </div>
 
       {/* Navigation */}
@@ -91,6 +102,12 @@ const Navbar = () => {
             </svg>
             +91 81421 89138
           </div>
+          <button
+            className="btn-outline"
+            onClick={() => setCancellationModalOpen(true)}
+          >
+            Cancel Trip
+          </button>
           <a href="#contact" className="btn-gold">Plan My Trip</a>
           <div className="hamburger" onClick={openMobileMenu}>
             <span></span>
@@ -99,6 +116,11 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      <UserCancellation
+        isOpen={cancellationModalOpen}
+        onClose={() => setCancellationModalOpen(false)}
+      />
     </>
   );
 };

@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import ManagePackages from './ManagePackages'
 import ManageDestinations from './ManageDestinations'
 import ManageBookings from './ManageBookings'
-import { getPackages, getDestinations, getBookings } from '../services/api'
+import NotificationsPanel from './NotificationsPanel'
+import { getPackages, getDestinations, getBookings, getNotifications } from '../services/api'
 import './AdminDashboard.css'
 
 const AdminDashboard = () => {
@@ -14,6 +15,7 @@ const AdminDashboard = () => {
     destinations: 0,
     bookings: 0
   })
+  const [unreadCount, setUnreadCount] = useState(0)
 
   const handleLogout = () => {
     localStorage.removeItem('isAdminLoggedIn')
@@ -36,6 +38,14 @@ const AdminDashboard = () => {
       } catch (error) {
         console.error('Failed to load stats:', error)
       }
+
+      // Fetch notification count separately — don't let it block stats
+      try {
+        const notifRes = await getNotifications()
+        setUnreadCount(notifRes.unreadCount || 0)
+      } catch (error) {
+        console.error('Failed to load notification count:', error)
+      }
     }
     loadStats()
   }, [])
@@ -48,6 +58,8 @@ const AdminDashboard = () => {
         return <ManageDestinations />
       case 'bookings':
         return <ManageBookings />
+      case 'notifications':
+        return <NotificationsPanel />
       default:
         return (
           <div className="overview-content">
@@ -95,6 +107,27 @@ const AdminDashboard = () => {
     <button onClick={() => setActiveTab('packages')} className={activeTab==='packages'?'active':''}>Packages</button>
     <button onClick={() => setActiveTab('destinations')} className={activeTab==='destinations'?'active':''}>Destinations</button>
     <button onClick={() => setActiveTab('bookings')} className={activeTab==='bookings'?'active':''}>Bookings</button>
+    <button
+      onClick={() => { setActiveTab('notifications'); setUnreadCount(0); }}
+      className={activeTab==='notifications'?'active':''}
+      style={{ position: 'relative' }}
+    >
+      🔔 Notifications
+      {unreadCount > 0 && (
+        <span style={{
+          position: 'absolute',
+          top: '2px',
+          right: '2px',
+          background: '#ef4444',
+          color: 'white',
+          borderRadius: '999px',
+          fontSize: '0.65rem',
+          fontWeight: 700,
+          padding: '1px 6px',
+          lineHeight: '1.4'
+        }}>{unreadCount}</span>
+      )}
+    </button>
   </div>
 
   <div className="nav-right">
@@ -110,6 +143,7 @@ const AdminDashboard = () => {
         {activeTab === 'packages' && 'Manage Packages'}
         {activeTab === 'destinations' && 'Manage Destinations'}
         {activeTab === 'bookings' && 'Manage Bookings'}
+        {activeTab === 'notifications' && '🔔 Notifications'}
       </h1>
     </div>
 

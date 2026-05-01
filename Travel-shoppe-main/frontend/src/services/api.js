@@ -14,9 +14,9 @@ export const getDestinations = async () => unwrap(await api.get('/destinations')
 export const createDestination = async (data) => unwrap(await api.post('/destinations', data));
 export const updateDestination = async (id, data) => unwrap(await api.put(`/destinations/${id}`, data));
 export const deleteDestination = async (id) => unwrap(await api.delete(`/destinations/${id}`));
-export const cancelBooking = (id) => {
-  return axios.put(`/api/bookings/${id}/cancel`);
-};
+// export const cancelBooking = (id) => {
+//   return axios.put(`/api/bookings/${id}/cancel`);
+// };
 export const getDestination = async (slug) => unwrap(await api.get(`/destinations/${slug}`));
 
 // Packages API
@@ -45,5 +45,11 @@ export const createBooking = async (data) => unwrap(await api.post('/bookings', 
 export const getBookings = async () => unwrap(await api.get('/bookings'));
 export const getBookingsByPhone = async (phone) => unwrap(await api.get(`/bookings/phone/${phone}`));
 export const cancelBooking = async (id) => unwrap(await api.put(`/bookings/${id}/cancel`));
+export const updateBookingStatus = async (id, status) => unwrap(await api.put(`/bookings/${id}/status`, { status }));
+
+// Notifications API
+export const getNotifications = async () => unwrap(await api.get('/notifications'));
+export const markNotificationRead = async (id) => unwrap(await api.put(`/notifications/${id}/read`));
+export const markAllNotificationsRead = async () => unwrap(await api.put('/notifications/read-all'));
 
 export default api;

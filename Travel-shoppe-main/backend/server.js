@@ -19,6 +19,7 @@ const testimonials = require('./routes/testimonials');
 const journeyCategories = require('./routes/journeyCategories');
 const contacts = require('./routes/contacts');
 const bookings = require('./routes/bookings');
+const notifications = require('./routes/notification'); // ← NEW
 
 const app = express();
 
@@ -27,8 +28,8 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://yourdomain.com' 
+  origin: process.env.NODE_ENV === 'production'
+    ? 'https://yourdomain.com'
     : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
@@ -40,6 +41,7 @@ app.use('/api/testimonials', testimonials);
 app.use('/api/journey-categories', journeyCategories);
 app.use('/api/contacts', contacts);
 app.use('/api/bookings', bookings);
+app.use('/api/notifications', notifications); // ← NEW
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -62,6 +64,7 @@ app.get('/', (req, res) => {
       journeyCategories: '/api/journey-categories',
       contacts: '/api/contacts',
       bookings: '/api/bookings',
+      notifications: '/api/notifications', // ← NEW
       health: '/api/health'
     }
   });

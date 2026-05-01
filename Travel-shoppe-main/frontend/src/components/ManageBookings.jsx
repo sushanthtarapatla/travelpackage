@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getBookings } from '../services/api'
-import { cancelBooking } from '../services/api'
+import { getBookings, updateBookingStatus } from '../services/api'
 
 const ManageBookings = () => {
   const [bookings, setBookings] = useState([])
@@ -26,9 +25,7 @@ const ManageBookings = () => {
   }, [])
 const handleCancel = async (id) => {
   try {
-    await cancelBooking(id);
-
-    // update UI instantly
+    await updateBookingStatus(id, 'cancelled');
     setBookings(prev =>
       prev.map(b =>
         b._id === id ? { ...b, status: "cancelled" } : b
@@ -36,6 +33,19 @@ const handleCancel = async (id) => {
     );
   } catch (error) {
     console.error("Cancel failed", error);
+  }
+};
+
+const handleStatusChange = async (id, newStatus) => {
+  try {
+    await updateBookingStatus(id, newStatus);
+    setBookings(prev =>
+      prev.map(b =>
+        b._id === id ? { ...b, status: newStatus } : b
+      )
+    );
+  } catch (error) {
+    console.error("Status update failed", error);
   }
 };
   const destinationSummary = useMemo(() => {
@@ -109,8 +119,19 @@ const handleCancel = async (id) => {
       {new Date(booking.travelDate).toLocaleDateString()} | People: {booking.people}
     </div>
 
-    <div>
-      {booking.status !== "cancelled" ? (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <select
+        value={booking.status}
+        onChange={(e) => handleStatusChange(booking._id, e.target.value)}
+        className={`status-select status-${booking.status}`}
+        disabled={booking.status === 'cancelled'}
+      >
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+
+      {booking.status !== "cancelled" && (
         <button
           className="cancel-btn"
           onClick={() => {
@@ -120,8 +141,6 @@ const handleCancel = async (id) => {
         >
           Cancel
         </button>
-      ) : (
-        <span className="status-cancelled">Cancelled</span>
       )}
     </div>
 
