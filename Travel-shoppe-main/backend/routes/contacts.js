@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
 const Notification = require('../models/Notification');
+const { Parser } = require('json2csv');
 
 // @desc    Get all contacts (admin)
 // @route   GET /api/contacts
@@ -32,7 +33,7 @@ router.post('/', async (req, res) => {
       await Notification.create({
         type: 'contact',
         message: `New enquiry from ${contact.name} (${contact.email})${contact.destination ? ' — Interested in: ' + contact.destination : ''}`,
-        refId: contact._id.toString()
+        contactId: contact._id
       });
     } catch (notifErr) {
       console.error('Notification create failed:', notifErr.message);
@@ -74,6 +75,44 @@ router.put('/:id', async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @desc    Download all contacts as CSV
+// @route   GET /api/contacts/download
+router.get('/download', async (req, res) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+
+    // Prepare data for CSV
+    const csvData = contacts.map(contact => ({
+      Name: contact.name,
+      Email: contact.email,
+      Phone: contact.phone || '',
+      Destination: contact.destination || '',
+      Message: contact.message,
+      Status: contact.status,
+      'Created At': contact.createdAt.toISOString()
+    }));
+
+    // Define CSV fields
+    const fields = ['Name', 'Email', 'Phone', 'Destination', 'Message', 'Status', 'Created At'];
+    const opts = { fields };
+
+    // Create CSV
+    const parser = new Parser(opts);
+    const csv = parser.parse(csvData);
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="contacts_${new Date().toISOString().split('T')[0]}.csv"`);
+
+    res.send(csv);
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error.message
     });

@@ -16,7 +16,7 @@ const initialForm = {
   itinerary: ''
 }
 
-const ManageDestinations = () => {
+const ManageDestinations = ({ onStatsChange }) => {
   const [destinations, setDestinations] = useState([])
   const [formData, setFormData] = useState(initialForm)
   const [editingId, setEditingId] = useState('')
@@ -69,6 +69,7 @@ const ManageDestinations = () => {
       await deleteDestination(id)
       setMessage('Destination deleted')
       await loadDestinations()
+      if (onStatsChange) onStatsChange()
     } catch (error) {
       setMessage('Delete failed')
     }
@@ -96,6 +97,7 @@ const ManageDestinations = () => {
       }
       resetForm()
       await loadDestinations()
+      if (onStatsChange) onStatsChange()
     } catch (error) {
       setMessage(error?.response?.data?.message || 'Save failed')
     }

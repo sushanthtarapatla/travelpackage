@@ -13,7 +13,7 @@ const initialForm = {
   priceValue: ''
 }
 
-const ManagePackages = () => {
+const ManagePackages = ({ onStatsChange }) => {
   const [packages, setPackages] = useState([])
   const [formData, setFormData] = useState(initialForm)
   const [editingId, setEditingId] = useState('')
@@ -68,6 +68,7 @@ const ManagePackages = () => {
       await deletePackage(id)
       setMessage('Package deleted')
       await loadPackages()
+      if (onStatsChange) onStatsChange()
     } catch (error) {
       setMessage('Delete failed')
     }
@@ -95,6 +96,7 @@ const ManagePackages = () => {
       }
       resetForm()
       await loadPackages()
+      if (onStatsChange) onStatsChange()
     } catch (error) {
       setMessage(error?.response?.data?.message || 'Save failed')
     }

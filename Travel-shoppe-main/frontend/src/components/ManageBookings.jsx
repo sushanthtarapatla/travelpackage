@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getBookings, updateBookingStatus } from '../services/api'
+import { getBookings, updateBookingStatus, downloadBookings } from '../services/api'
 
-const ManageBookings = () => {
+const ManageBookings = ({ onStatsChange }) => {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -31,6 +31,7 @@ const handleCancel = async (id) => {
         b._id === id ? { ...b, status: "cancelled" } : b
       )
     );
+    if (onStatsChange) onStatsChange();
   } catch (error) {
     console.error("Cancel failed", error);
   }
@@ -44,10 +45,29 @@ const handleStatusChange = async (id, newStatus) => {
         b._id === id ? { ...b, status: newStatus } : b
       )
     );
+    if (onStatsChange) onStatsChange();
   } catch (error) {
     console.error("Status update failed", error);
   }
 };
+
+  const handleDownloadBookings = async () => {
+    try {
+      const response = await downloadBookings()
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `bookings_${new Date().toISOString().split('T')[0]}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Failed to download bookings', e)
+      alert('Failed to download bookings. Please try again.')
+    }
+  }
+
   const destinationSummary = useMemo(() => {
     const summary = {}
 
@@ -77,7 +97,24 @@ const handleStatusChange = async (id, newStatus) => {
 
   return (
     <div className="admin-card">
-      <h3>Manage Bookings</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h3 style={{ margin: 0 }}>Manage Bookings</h3>
+        <button
+          onClick={handleDownloadBookings}
+          style={{
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            fontSize: '0.85rem'
+          }}
+        >
+          📥 Download Bookings
+        </button>
+      </div>
       {message ? <p className="admin-message">{message}</p> : null}
       {loading ? <p>Loading bookings...</p> : null}
       {!loading && !destinationSummary.length ? <p>No active bookings available.</p> : null}

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Booking = require('../models/Booking');
 const Notification = require('../models/Notification');
+const { Parser } = require('json2csv');
 
 // @desc    Create a booking
 // @route   POST /api/bookings
@@ -157,6 +158,45 @@ router.put('/:id/status', async (req, res) => {
       data: booking
     });
 
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+// @desc    Download all bookings as CSV
+// @route   GET /api/bookings/download
+router.get('/download', async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort({ createdAt: -1 });
+
+    // Prepare data for CSV
+    const csvData = bookings.map(booking => ({
+      Name: booking.name,
+      Email: booking.email,
+      Phone: booking.phone,
+      Destination: booking.destination,
+      'Travel Date': booking.travelDate.toISOString().split('T')[0],
+      'Number of People': booking.people,
+      Status: booking.status,
+      'Created At': booking.createdAt.toISOString()
+    }));
+
+    // Define CSV fields
+    const fields = ['Name', 'Email', 'Phone', 'Destination', 'Travel Date', 'Number of People', 'Status', 'Created At'];
+    const opts = { fields };
+
+    // Create CSV
+    const parser = new Parser(opts);
+    const csv = parser.parse(csvData);
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="bookings_${new Date().toISOString().split('T')[0]}.csv"`);
+
+    res.send(csv);
   } catch (error) {
     res.status(500).json({
       success: false,

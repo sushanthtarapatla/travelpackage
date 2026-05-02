@@ -39,6 +39,7 @@ export const getJourneyCategories = async () => unwrap(await api.get('/journey-c
 
 // Contact API
 export const submitContact = async (data) => unwrap(await api.post('/contacts', data));
+export const downloadContacts = async () => api.get('/contacts/download', { responseType: 'blob' });
 
 // Booking API
 export const createBooking = async (data) => unwrap(await api.post('/bookings', data));
@@ -46,10 +47,12 @@ export const getBookings = async () => unwrap(await api.get('/bookings'));
 export const getBookingsByPhone = async (phone) => unwrap(await api.get(`/bookings/phone/${phone}`));
 export const cancelBooking = async (id) => unwrap(await api.put(`/bookings/${id}/cancel`));
 export const updateBookingStatus = async (id, status) => unwrap(await api.put(`/bookings/${id}/status`, { status }));
+export const downloadBookings = async () => api.get('/bookings/download', { responseType: 'blob' });
 
 // Notifications API
 export const getNotifications = async () => unwrap(await api.get('/notifications'));
 export const markNotificationRead = async (id) => unwrap(await api.put(`/notifications/${id}/read`));
 export const markAllNotificationsRead = async () => unwrap(await api.put('/notifications/read-all'));
+export const deleteNotification = async (id) => unwrap(await api.delete(`/notifications/${id}`));
 
 export default api;

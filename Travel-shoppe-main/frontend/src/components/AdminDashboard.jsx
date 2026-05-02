@@ -22,44 +22,45 @@ const AdminDashboard = () => {
     navigate('/admin/login')
   }
 
-  useEffect(() => {
-    const loadStats = async () => {
-      try {
-        const [packagesRes, destinationsRes, bookingsRes] = await Promise.all([
-          getPackages(),
-          getDestinations(),
-          getBookings()
-        ])
-        setStats({
-          packages: packagesRes.data?.length || 0,
-          destinations: destinationsRes.data?.length || 0,
-          bookings: bookingsRes.data?.length || 0
-        })
-      } catch (error) {
-        console.error('Failed to load stats:', error)
-      }
-
-      // Fetch notification count separately — don't let it block stats
-      try {
-        const notifRes = await getNotifications()
-        setUnreadCount(notifRes.unreadCount || 0)
-      } catch (error) {
-        console.error('Failed to load notification count:', error)
-      }
+  const loadStats = async () => {
+    try {
+      const [packagesRes, destinationsRes, bookingsRes] = await Promise.all([
+        getPackages(),
+        getDestinations(),
+        getBookings()
+      ])
+      setStats({
+        packages: packagesRes.data?.length || 0,
+        destinations: destinationsRes.data?.length || 0,
+        bookings: bookingsRes.data?.filter(b => b.status !== 'cancelled').length || 0
+      })
+    } catch (error) {
+      console.error('Failed to load stats:', error)
     }
+
+    // Fetch notification count separately — don't let it block stats
+    try {
+      const notifRes = await getNotifications()
+      setUnreadCount(notifRes.unreadCount || 0)
+    } catch (error) {
+      console.error('Failed to load notification count:', error)
+    }
+  }
+
+  useEffect(() => {
     loadStats()
   }, [])
 
   const renderContent = () => {
     switch (activeTab) {
       case 'packages':
-        return <ManagePackages />
+        return <ManagePackages onStatsChange={loadStats} />
       case 'destinations':
-        return <ManageDestinations />
+        return <ManageDestinations onStatsChange={loadStats} />
       case 'bookings':
-        return <ManageBookings />
+        return <ManageBookings onStatsChange={loadStats} />
       case 'notifications':
-        return <NotificationsPanel />
+        return <NotificationsPanel onStatsChange={loadStats} />
       default:
         return (
           <div className="overview-content">

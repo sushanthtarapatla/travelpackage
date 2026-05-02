@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api'
+import { getNotifications, markNotificationRead, markAllNotificationsRead, deleteNotification, downloadContacts } from '../services/api'
 
 const TYPE_CONFIG = {
   cancellation: { icon: '❌', label: 'Cancellation', color: '#ef4444', bg: '#fef2f2' },
@@ -7,7 +7,7 @@ const TYPE_CONFIG = {
   upcoming:     { icon: '🗓️', label: 'Upcoming',     color: '#d97706', bg: '#fffbeb' },
 }
 
-const NotificationsPanel = () => {
+const NotificationsPanel = ({ onStatsChange }) => {
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all') // all | unread
@@ -43,6 +43,34 @@ const NotificationsPanel = () => {
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
     } catch (e) {
       console.error('Failed to mark all read', e)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (!confirm('Are you sure you want to delete this notification?')) return
+    try {
+      await deleteNotification(id)
+      setNotifications(prev => prev.filter(n => n._id !== id))
+      if (onStatsChange) onStatsChange()
+    } catch (e) {
+      console.error('Failed to delete notification', e)
+    }
+  }
+
+  const handleDownloadContacts = async () => {
+    try {
+      const response = await downloadContacts()
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `contacts_${new Date().toISOString().split('T')[0]}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Failed to download contacts', e)
+      alert('Failed to download contacts. Please try again.')
     }
   }
 
@@ -87,6 +115,22 @@ const NotificationsPanel = () => {
             Mark all as read
           </button>
         )}
+        <button
+          onClick={handleDownloadContacts}
+          style={{
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            marginLeft: '10px'
+          }}
+        >
+          📥 Download Contacts
+        </button>
       </div>
 
       {/* Filter tabs */}
@@ -129,93 +173,142 @@ const NotificationsPanel = () => {
         </div>
       )}
 
-      {!loading && displayed.map(n => {
-        const cfg = TYPE_CONFIG[n.type] || TYPE_CONFIG.contact
-        return (
-          <div
-            key={n._id}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '14px',
-              padding: '14px 16px',
-              marginBottom: '10px',
-              borderRadius: '12px',
-              border: `1px solid ${n.isRead ? '#e2e8f0' : cfg.color}`,
-              background: n.isRead ? '#fafafa' : cfg.bg,
-              opacity: n.isRead ? 0.75 : 1,
-              transition: 'all 0.2s'
-            }}
-          >
-            {/* Icon */}
-            <div style={{
-              fontSize: '1.4rem',
-              minWidth: '36px',
-              height: '36px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              background: cfg.bg,
-              border: `1.5px solid ${cfg.color}`
-            }}>
-              {cfg.icon}
-            </div>
-
-            {/* Content */}
-            <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '4px' }}>
-                <span style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
+      {!loading && displayed.length > 0 && (
+        <div>
+          {['contact', 'cancellation', 'upcoming'].map(type => {
+            const typeNotifications = displayed.filter(n => n.type === type)
+            if (typeNotifications.length === 0) return null
+            const cfg = TYPE_CONFIG[type]
+            return (
+              <div key={type} style={{ marginBottom: '24px' }}>
+                <h4 style={{
+                  margin: '0 0 12px',
                   color: cfg.color,
+                  fontSize: '1rem',
+                  fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em'
                 }}>
-                  {cfg.label}
-                </span>
-                {!n.isRead && (
-                  <span style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: cfg.color,
-                    display: 'inline-block'
-                  }} />
-                )}
-              </div>
-              <p style={{ margin: 0, color: '#1f2937', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                {n.message}
-              </p>
-              <p style={{ margin: '4px 0 0', color: '#9ca3af', fontSize: '0.78rem' }}>
-                {new Date(n.createdAt).toLocaleString()}
-              </p>
-            </div>
+                  {cfg.icon} {cfg.label} ({typeNotifications.length})
+                </h4>
+                {typeNotifications.map(n => (
+                  <div
+                    key={n._id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '14px',
+                      padding: '14px 16px',
+                      marginBottom: '10px',
+                      borderRadius: '12px',
+                      border: `1px solid ${n.isRead ? '#e2e8f0' : cfg.color}`,
+                      background: n.isRead ? '#fafafa' : cfg.bg,
+                      opacity: n.isRead ? 0.75 : 1,
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {/* Icon */}
+                    <div style={{
+                      fontSize: '1.4rem',
+                      minWidth: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '50%',
+                      background: cfg.bg,
+                      border: `1.5px solid ${cfg.color}`
+                    }}>
+                      {cfg.icon}
+                    </div>
 
-            {/* Mark read button */}
-            {!n.isRead && (
-              <button
-                onClick={() => handleMarkRead(n._id)}
-                title="Mark as read"
-                style={{
-                  background: 'none',
-                  border: `1.5px solid ${cfg.color}`,
-                  borderRadius: '6px',
-                  color: cfg.color,
-                  padding: '4px 10px',
-                  cursor: 'pointer',
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0
-                }}
-              >
-                Mark read
-              </button>
-            )}
-          </div>
-        )
-      })}
+                    {/* Content */}
+                    <div style={{ flex: 1 }}>
+                      {!n.isRead && (
+                        <span style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: cfg.color,
+                          display: 'inline-block',
+                          marginBottom: '4px'
+                        }} />
+                      )}
+                      {n.type === 'contact' && n.contactId ? (
+                        <div style={{ marginBottom: '8px' }}>
+                          <p style={{ margin: '0 0 4px', color: '#1f2937', fontSize: '0.9rem', fontWeight: 600 }}>
+                            {n.contactId.name} ({n.contactId.email})
+                          </p>
+                          {n.contactId.phone && (
+                            <p style={{ margin: '0 0 4px', color: '#6b7280', fontSize: '0.85rem' }}>
+                              Phone: {n.contactId.phone}
+                            </p>
+                          )}
+                          {n.contactId.destination && (
+                            <p style={{ margin: '0 0 4px', color: '#6b7280', fontSize: '0.85rem' }}>
+                              Destination: {n.contactId.destination}
+                            </p>
+                          )}
+                          <p style={{ margin: 0, color: '#1f2937', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                            Message: {n.contactId.message}
+                          </p>
+                        </div>
+                      ) : (
+                        <p style={{ margin: 0, color: '#1f2937', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                          {n.message}
+                        </p>
+                      )}
+                      <p style={{ margin: '4px 0 0', color: '#9ca3af', fontSize: '0.78rem' }}>
+                        {new Date(n.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                      {!n.isRead && (
+                        <button
+                          onClick={() => handleMarkRead(n._id)}
+                          title="Mark as read"
+                          style={{
+                            background: 'none',
+                            border: `1.5px solid ${cfg.color}`,
+                            borderRadius: '6px',
+                            color: cfg.color,
+                            padding: '4px 10px',
+                            cursor: 'pointer',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          Mark read
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(n._id)}
+                        title="Delete notification"
+                        style={{
+                          background: 'none',
+                          border: '1.5px solid #ef4444',
+                          borderRadius: '6px',
+                          color: '#ef4444',
+                          padding: '4px 10px',
+                          cursor: 'pointer',
+                          fontSize: '0.78rem',
+                          fontWeight: 600,
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
