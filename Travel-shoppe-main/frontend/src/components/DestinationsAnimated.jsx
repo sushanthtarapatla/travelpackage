@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDestinations, usePackages } from '../hooks/useApi';
@@ -55,6 +56,8 @@ const DestinationsAnimated = () => {
     });
   };
 
+  const navigate = useNavigate();
+
   const handleBookNowClick = (destination) => {
     window.dispatchEvent(
       new CustomEvent('open-booking-modal', {
@@ -62,6 +65,10 @@ const DestinationsAnimated = () => {
       })
     );
   };
+
+  const handleViewDetails = (slug) => {
+    navigate(`/destinations/${slug}`)
+  }
 
   useEffect(() => {
     if (!destinations.length) return;
@@ -280,31 +287,46 @@ const DestinationsAnimated = () => {
                 alt={destination.name} 
                 loading="lazy" 
               />
+              {destination.recommendation && (
+                <div className="card-badge">{destination.recommendation}</div>
+              )}
             </div>
             <div className="dest-card-overlay"></div>
             <div className="dest-card-info">
               <div className="dest-card-name">{destination.name}</div>
             </div>
-            <button
-              type="button"
-              className="dest-card-arrow"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpenItinerary(destination.name);
-              }}
-            >
-              →
-            </button>
-            <button
-              type="button"
-              className="dest-card-book"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleBookNowClick(destination.name);
-              }}
-            >
-              Book
-            </button>
+            <div className="dest-card-actions">
+              <button
+                type="button"
+                className="dest-card-arrow"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleOpenItinerary(destination.name);
+                }}
+              >
+                →
+              </button>
+              <button
+                type="button"
+                className="btn-outline dest-card-detail"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewDetails(destination.slug)
+                }}
+              >
+                Details
+              </button>
+              <button
+                type="button"
+                className="dest-card-book"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBookNowClick(destination.name);
+                }}
+              >
+                Book
+              </button>
+            </div>
           </div>
         ))}
       </div>

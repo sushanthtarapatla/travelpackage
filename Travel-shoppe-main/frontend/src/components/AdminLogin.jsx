@@ -27,10 +27,10 @@ const AdminLogin = () => {
   }
 
   return (
-    <div className="admin-page" style={{ display: 'grid', placeItems: 'center' }}>
-      <form onSubmit={handleSubmit} className="admin-card" style={{ width: '100%', maxWidth: '420px' }}>
-        <h2 style={{ margin: '0 0 16px' }}>Admin Login</h2>
-        {error ? <p style={{ color: '#c62828', marginBottom: '12px' }}>{error}</p> : null}
+    <div className="admin-page">
+      <form onSubmit={handleSubmit} className="admin-card">
+        <h2>Admin Login</h2>
+        {error ? <p style={{ color: '#ef4444', marginBottom: '12px', textAlign: 'center' }}>{error}</p> : null}
         <div className="admin-form">
           <input
             type="text"

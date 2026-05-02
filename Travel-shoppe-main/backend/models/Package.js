@@ -28,7 +28,15 @@ const packageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  recommendation: {
+    type: String,
+    default: ''
+  },
   itinerary: {
+    type: [String],
+    default: []
+  },
+  itineraryImages: {
     type: [String],
     default: []
   },

@@ -13,7 +13,9 @@ const initialForm = {
   price: '',
   priceValue: '',
   duration: '',
-  itinerary: ''
+  itinerary: '',
+  itineraryImages: '',
+  recommendation: ''
 }
 
 const ManageDestinations = ({ onStatsChange }) => {
@@ -58,7 +60,9 @@ const ManageDestinations = ({ onStatsChange }) => {
       price: destination.price || '',
       priceValue: destination.priceValue || '',
       duration: destination.duration || '',
-      itinerary: Array.isArray(destination.itinerary) ? destination.itinerary.join(', ') : ''
+      itinerary: Array.isArray(destination.itinerary) ? destination.itinerary.join(', ') : '',
+      itineraryImages: Array.isArray(destination.itineraryImages) ? destination.itineraryImages.join(', ') : '',
+      recommendation: destination.recommendation || ''
     })
     setMessage('')
   }
@@ -82,6 +86,10 @@ const ManageDestinations = ({ onStatsChange }) => {
       ...formData,
       priceValue: Number(formData.priceValue),
       itinerary: formData.itinerary
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
+      itineraryImages: formData.itineraryImages
         .split(',')
         .map((item) => item.trim())
         .filter(Boolean)
@@ -118,6 +126,18 @@ const ManageDestinations = ({ onStatsChange }) => {
           name="itinerary"
           placeholder="Itinerary (comma separated day-wise)"
           value={formData.itinerary}
+          onChange={handleChange}
+        />
+        <input
+          name="itineraryImages"
+          placeholder="Itinerary Images (comma separated URLs)"
+          value={formData.itineraryImages}
+          onChange={handleChange}
+        />
+        <input
+          name="recommendation"
+          placeholder="Recommendation label (e.g. Best Seller)"
+          value={formData.recommendation}
           onChange={handleChange}
         />
         <input

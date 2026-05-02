@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePackages } from '../hooks/useApi';
 import { itineraries } from '../data/itineraries';
 import './Packages.css';
 
 const Packages = () => {
+  const navigate = useNavigate();
   const { packages, loading, error } = usePackages();
   const sectionRef = useRef(null);
   const [selectedItinerary, setSelectedItinerary] = useState(null);
@@ -89,7 +91,7 @@ const Packages = () => {
           >
             <div className="pkg-img">
               <img src={pkg.image} alt={pkg.name} loading="lazy" />
-              {pkg.tag && <div className="pkg-tag">{pkg.tag}</div>}
+              {(pkg.tag || pkg.recommendation) && <div className="pkg-tag">{pkg.tag || pkg.recommendation}</div>}
             </div>
             <div className="pkg-body">
               <div className="pkg-location">{pkg.location}</div>
@@ -131,6 +133,13 @@ const Packages = () => {
                     onClick={() => handleViewItinerary(pkg)}
                   >
                     View Itinerary
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-outline btn-details"
+                    onClick={() => navigate(`/packages/${pkg.slug}`)}
+                  >
+                    View Details
                   </button>
                   <a
                     href="#contact"

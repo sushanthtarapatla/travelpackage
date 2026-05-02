@@ -36,6 +36,14 @@ const destinationSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  itineraryImages: {
+    type: [String],
+    default: []
+  },
+  recommendation: {
+    type: String,
+    default: ''
+  },
   featured: {
     type: Boolean,
     default: false

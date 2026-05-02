@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePackages } from '../hooks/useApi';
@@ -21,6 +22,8 @@ const PackagesAnimated = () => {
     }, {});
   }, []);
 
+  const navigate = useNavigate();
+
   const handleBookNowClick = (destination) => {
     window.dispatchEvent(
       new CustomEvent('open-booking-modal', {
@@ -28,6 +31,10 @@ const PackagesAnimated = () => {
       })
     );
   };
+
+  const handleViewDetails = (slug) => {
+    navigate(`/packages/${slug}`)
+  }
 
   const handleViewItinerary = (pkg) => {
     const destinationName = pkg.location || '';
@@ -279,7 +286,7 @@ const PackagesAnimated = () => {
           >
             <div className="pkg-img">
               <img src={pkg.image} alt={pkg.name} loading="lazy" />
-              {pkg.tag && <div className="pkg-tag">{pkg.tag}</div>}
+              {(pkg.tag || pkg.recommendation) && <div className="pkg-tag">{pkg.tag || pkg.recommendation}</div>}
             </div>
             <div className="pkg-body">
               <div className="pkg-location">{pkg.location}</div>
@@ -309,6 +316,18 @@ const PackagesAnimated = () => {
                   <div className="pkg-meta-item" key={idx}>✈ {inc}</div>
                 ))}
               </div>
+              {pkg.itinerary && pkg.itinerary.length > 0 && (
+                <div className="pkg-itinerary-preview">
+                  {pkg.itinerary.slice(0, 2).map((item, idx) => (
+                    <div className="pkg-itinerary-line" key={idx}>
+                      <span>Day {idx + 1}:</span> {item}
+                    </div>
+                  ))}
+                  {pkg.itinerary.length > 2 && (
+                    <div className="pkg-itinerary-more">+{pkg.itinerary.length - 2} more days</div>
+                  )}
+                </div>
+              )}
               <div className="pkg-footer">
                 <div className="pkg-actions">
                   <button
@@ -317,6 +336,13 @@ const PackagesAnimated = () => {
                     onClick={() => handleViewItinerary(pkg)}
                   >
                     View Itinerary
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-outline btn-details"
+                    onClick={() => handleViewDetails(pkg.slug)}
+                  >
+                    Details
                   </button>
                   <a
                     href="#"

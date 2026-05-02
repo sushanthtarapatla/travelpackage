@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDestinations } from '../hooks/useApi';
 import './Destinations.css';
 
 const Destinations = () => {
+  const navigate = useNavigate();
   const { destinations, loading, error } = useDestinations();
   const sectionRef = useRef(null);
 
@@ -49,8 +51,13 @@ const Destinations = () => {
             <div className="dest-card-overlay"></div>
             <div className="dest-card-info">
               <div className="dest-card-name">{destination.name}</div>
-              <div className="dest-card-price">{destination.price}</div>
-            </div>
+              <div className="dest-card-price">{destination.price}</div>              <button
+                type="button"
+                className="btn-details"
+                onClick={() => navigate(`/destinations/${destination.slug}`)}
+              >
+                View Details
+              </button>            </div>
             <div className="dest-card-arrow">→</div>
           </div>
         ))}
