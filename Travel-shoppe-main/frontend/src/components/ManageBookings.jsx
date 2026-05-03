@@ -97,21 +97,9 @@ const handleStatusChange = async (id, newStatus) => {
 
   return (
     <div className="admin-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0 }}>Manage Bookings</h3>
-        <button
-          onClick={handleDownloadBookings}
-          style={{
-            background: 'linear-gradient(135deg, #10b981, #059669)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            fontWeight: 600,
-            fontSize: '0.85rem'
-          }}
-        >
+      <div className="admin-card-header">
+        <h3>Manage Bookings</h3>
+        <button onClick={handleDownloadBookings} className="btn-gold">
           📥 Download Bookings
         </button>
       </div>
@@ -126,8 +114,7 @@ const handleStatusChange = async (id, newStatus) => {
             <button
               key={item.destination}
               type="button"
-              className="admin-list-row"
-              style={{ width: '100%', textAlign: 'left', background: '#fff' }}
+              className="admin-list-button"
               onClick={() => setSelectedDestination(item.destination)}
             >
               <span>
@@ -142,7 +129,7 @@ const handleStatusChange = async (id, newStatus) => {
       ) : null}
 
       {selectedDestination ? (
-        <div style={{ marginTop: '12px' }}>
+        <div className="admin-section-spacing">
           <h4>{selectedDestination} Bookings</h4>
           {!selectedBookings.length ? <p>No bookings for this destination.</p> : null}
           {selectedBookings.map((booking) => (
@@ -156,7 +143,7 @@ const handleStatusChange = async (id, newStatus) => {
       {new Date(booking.travelDate).toLocaleDateString()} | People: {booking.people}
     </div>
 
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div className="booking-actions-row">
       <select
         value={booking.status}
         onChange={(e) => handleStatusChange(booking._id, e.target.value)}

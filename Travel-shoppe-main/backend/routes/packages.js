@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Package = require('../models/Package');
+const {
+  enrichWithDynamicTags,
+  normalizeRecommendationTagsPayload
+} = require('../utils/recommendationHelpers');
 
 // @desc    Get all packages
 // @route   GET /api/packages
 router.get('/', async (req, res) => {
   try {
     const packages = await Package.find().sort({ order: 1 });
+    const packagesWithTags = await enrichWithDynamicTags(packages, 'location', 'priceValue');
     res.json({
       success: true,
-      count: packages.length,
-      data: packages
+      count: packagesWithTags.length,
+      data: packagesWithTags
     });
   } catch (error) {
     res.status(500).json({
@@ -25,10 +30,11 @@ router.get('/', async (req, res) => {
 router.get('/featured', async (req, res) => {
   try {
     const packages = await Package.find({ featured: true }).sort({ order: 1 });
+    const packagesWithTags = await enrichWithDynamicTags(packages, 'location', 'priceValue');
     res.json({
       success: true,
-      count: packages.length,
-      data: packages
+      count: packagesWithTags.length,
+      data: packagesWithTags
     });
   } catch (error) {
     res.status(500).json({
@@ -50,10 +56,12 @@ router.get('/:slug', async (req, res) => {
         message: 'Package not found'
       });
     }
-    
+
+    const [packageWithTags] = await enrichWithDynamicTags([packageItem], 'location', 'priceValue');
+
     res.json({
       success: true,
-      data: packageItem
+      data: packageWithTags
     });
   } catch (error) {
     res.status(500).json({
@@ -67,7 +75,7 @@ router.get('/:slug', async (req, res) => {
 // @route   POST /api/packages
 router.post('/', async (req, res) => {
   try {
-    const packageItem = await Package.create(req.body);
+    const packageItem = await Package.create(normalizeRecommendationTagsPayload(req.body));
     res.status(201).json({
       success: true,
       data: packageItem
@@ -86,7 +94,7 @@ router.put('/:id', async (req, res) => {
   try {
     const packageItem = await Package.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      normalizeRecommendationTagsPayload(req.body),
       {
         new: true,
         runValidators: true

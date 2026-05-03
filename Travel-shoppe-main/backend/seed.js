@@ -17,6 +17,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=700&q=85&fit=crop',
     price: 'From ₹1,25,000',
     priceValue: 125000,
+    tag: 'Beach Paradise',
     featured: true,
     order: 1
   },
@@ -26,6 +27,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=700&q=85&fit=crop',
     price: 'From ₹1,45,000',
     priceValue: 145000,
+    tag: 'Island Hopping',
     featured: true,
     order: 2
   },
@@ -35,6 +37,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=700&q=85&fit=crop',
     price: 'From ₹1,60,000',
     priceValue: 160000,
+    tag: 'Mountain Escape',
     featured: true,
     order: 3
   },
@@ -44,6 +47,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=85&fit=crop',
     price: 'From ₹95,000',
     priceValue: 95000,
+    tag: 'Urban Luxury',
     order: 4
   },
   {
@@ -52,6 +56,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700&q=85&fit=crop',
     price: 'From ₹85,000',
     priceValue: 85000,
+    tag: 'Cultural Retreat',
     order: 5
   },
   {
@@ -60,6 +65,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=700&q=85&fit=crop',
     price: 'From ₹1,75,000',
     priceValue: 175000,
+    tag: 'Ancient Wonders',
     order: 6
   },
   {
@@ -68,6 +74,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=700&q=85&fit=crop',
     price: 'From ₹1,50,000',
     priceValue: 150000,
+    tag: 'Romantic Gateway',
     order: 7
   },
   {
@@ -76,6 +83,7 @@ const destinations = [
     image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=700&q=85&fit=crop',
     price: 'From ₹1,30,000',
     priceValue: 130000,
+    tag: 'Wine Country',
     order: 8
   }
 ];

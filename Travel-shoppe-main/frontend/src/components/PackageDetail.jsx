@@ -62,9 +62,12 @@ const PackageDetail = () => {
           <img src={packageItem.image} alt={packageItem.name} />
           <div className="detail-hero-copy">
             <div className="detail-tags">
-              {(packageItem.recommendation || packageItem.tag) && (
-                <span className="badge">{packageItem.recommendation || packageItem.tag}</span>
-              )}
+              {((packageItem.recommendationTags && packageItem.recommendationTags.length)
+                ? packageItem.recommendationTags
+                : [packageItem.recommendation || packageItem.tag].filter(Boolean)
+              ).map((tag, idx) => (
+                <span key={idx} className="badge">{tag}</span>
+              ))}
             </div>
             <h1>{packageItem.name}</h1>
             <p className="detail-subtitle">{packageItem.location}</p>

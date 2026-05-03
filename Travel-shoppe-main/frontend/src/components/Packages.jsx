@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePackages } from '../hooks/useApi';
 import { itineraries } from '../data/itineraries';
+import RecommendationBadges from './RecommendationBadges';
 import './Packages.css';
 
 const Packages = () => {
@@ -91,7 +92,7 @@ const Packages = () => {
           >
             <div className="pkg-img">
               <img src={pkg.image} alt={pkg.name} loading="lazy" />
-              {(pkg.tag || pkg.recommendation) && <div className="pkg-tag">{pkg.tag || pkg.recommendation}</div>}
+              <RecommendationBadges item={pkg} />
             </div>
             <div className="pkg-body">
               <div className="pkg-location">{pkg.location}</div>

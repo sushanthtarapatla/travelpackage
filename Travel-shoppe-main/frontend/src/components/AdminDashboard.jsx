@@ -110,23 +110,11 @@ const AdminDashboard = () => {
     <button onClick={() => setActiveTab('bookings')} className={activeTab==='bookings'?'active':''}>Bookings</button>
     <button
       onClick={() => { setActiveTab('notifications'); setUnreadCount(0); }}
-      className={activeTab==='notifications'?'active':''}
-      style={{ position: 'relative' }}
+      className={`nav-notification-btn ${activeTab==='notifications' ? 'active' : ''}`}
     >
       🔔 Notifications
       {unreadCount > 0 && (
-        <span style={{
-          position: 'absolute',
-          top: '2px',
-          right: '2px',
-          background: '#ef4444',
-          color: 'white',
-          borderRadius: '999px',
-          fontSize: '0.65rem',
-          fontWeight: 700,
-          padding: '1px 6px',
-          lineHeight: '1.4'
-        }}>{unreadCount}</span>
+        <span className="notification-badge">{unreadCount}</span>
       )}
     </button>
   </div>

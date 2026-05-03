@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePackages } from '../hooks/useApi';
 import { itineraries } from '../data/itineraries';
+import RecommendationBadges from './RecommendationBadges';
 import './PackagesAnimated.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -136,7 +137,7 @@ const PackagesAnimated = () => {
         cards.forEach((card, index) => {
           const isFeatured = index === 1;
           const image = card.querySelector('.pkg-img img');
-          const tag = card.querySelector('.pkg-tag');
+          const tag = card.querySelector('.recommendation-badge');
           const price = card.querySelector('.pkg-price');
 
           card.addEventListener('mouseenter', () => {
@@ -233,27 +234,7 @@ const PackagesAnimated = () => {
           });
         });
 
-        // Ambient floating
-        cards.forEach((card, index) => {
-          gsap.to(card, {
-            y: -8,
-            duration: 2 + index * 0.3,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1,
-            delay: index * 0.5
-          });
-        });
       }
-
-      // Tag wiggle animation for featured
-      gsap.to('.pkg-tag', {
-        rotation: 2,
-        duration: 2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1
-      });
 
     }, sectionRef);
 
@@ -286,7 +267,7 @@ const PackagesAnimated = () => {
           >
             <div className="pkg-img">
               <img src={pkg.image} alt={pkg.name} loading="lazy" />
-              {(pkg.tag || pkg.recommendation) && <div className="pkg-tag">{pkg.tag || pkg.recommendation}</div>}
+              <RecommendationBadges item={pkg} />
             </div>
             <div className="pkg-body">
               <div className="pkg-location">{pkg.location}</div>

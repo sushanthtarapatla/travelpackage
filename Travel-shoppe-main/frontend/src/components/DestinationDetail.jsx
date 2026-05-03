@@ -62,9 +62,12 @@ const DestinationDetail = () => {
           <img src={destination.image} alt={destination.name} />
           <div className="detail-hero-copy">
           <div className="detail-tags">
-            {destination.recommendation && (
-              <span className="badge">{destination.recommendation}</span>
-            )}
+            {((destination.recommendationTags && destination.recommendationTags.length)
+              ? destination.recommendationTags
+              : [destination.recommendation].filter(Boolean)
+            ).map((tag, idx) => (
+              <span key={idx} className="badge">{tag}</span>
+            ))}
           </div>
           <h1>{destination.name}</h1>
           {destination.duration && <p className="detail-duration">{destination.duration}</p>}

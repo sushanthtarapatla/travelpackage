@@ -83,74 +83,38 @@ const NotificationsPanel = ({ onStatsChange }) => {
   return (
     <div className="admin-card">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0 }}>
+      <div className="admin-card-header">
+        <h3 className="admin-card-title">
           🔔 Notifications
           {unreadCount > 0 && (
-            <span style={{
-              marginLeft: '10px',
-              background: '#ef4444',
-              color: 'white',
-              borderRadius: '999px',
-              padding: '2px 10px',
-              fontSize: '0.8rem',
-              fontWeight: 700
-            }}>{unreadCount} new</span>
+            <span className="notification-summary-badge">{unreadCount} new</span>
           )}
         </h3>
-        {unreadCount > 0 && (
+        <div className="admin-actions">
+          {unreadCount > 0 && (
+            <button
+              onClick={handleMarkAllRead}
+              className="btn-outline"
+            >
+              Mark all as read
+            </button>
+          )}
           <button
-            onClick={handleMarkAllRead}
-            style={{
-              background: 'linear-gradient(135deg, #667eea, #764ba2)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '8px 16px',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.85rem'
-            }}
+            onClick={handleDownloadContacts}
+            className="btn-gold"
           >
-            Mark all as read
+            📥 Download Contacts
           </button>
-        )}
-        <button
-          onClick={handleDownloadContacts}
-          style={{
-            background: 'linear-gradient(135deg, #10b981, #059669)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            fontWeight: 600,
-            fontSize: '0.85rem',
-            marginLeft: '10px'
-          }}
-        >
-          📥 Download Contacts
-        </button>
+        </div>
       </div>
 
       {/* Filter tabs */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+      <div className="notification-filter-row">
         {['all', 'unread'].map(f => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            style={{
-              padding: '6px 18px',
-              borderRadius: '20px',
-              border: '2px solid',
-              borderColor: filter === f ? '#667eea' : '#e2e8f0',
-              background: filter === f ? '#667eea' : 'white',
-              color: filter === f ? 'white' : '#6b7280',
-              fontWeight: 600,
-              cursor: 'pointer',
-              fontSize: '0.85rem',
-              transition: 'all 0.2s'
-            }}
+            className={`admin-filter-tab ${filter === f ? 'active' : ''}`}
           >
             {f === 'all' ? `All (${notifications.length})` : `Unread (${unreadCount})`}
           </button>
@@ -158,16 +122,12 @@ const NotificationsPanel = ({ onStatsChange }) => {
       </div>
 
       {/* List */}
-      {loading && <p style={{ color: '#6b7280' }}>Loading notifications...</p>}
+      {loading && <p className="admin-status-text">Loading notifications...</p>}
 
       {!loading && displayed.length === 0 && (
-        <div style={{
-          textAlign: 'center',
-          padding: '48px 0',
-          color: '#9ca3af'
-        }}>
-          <div style={{ fontSize: '3rem' }}>🎉</div>
-          <p style={{ marginTop: '12px', fontSize: '1rem' }}>
+        <div className="admin-empty-state">
+          <div className="admin-empty-icon">🎉</div>
+          <p>
             {filter === 'unread' ? 'No unread notifications!' : 'No notifications yet.'}
           </p>
         </div>
@@ -180,106 +140,63 @@ const NotificationsPanel = ({ onStatsChange }) => {
             if (typeNotifications.length === 0) return null
             const cfg = TYPE_CONFIG[type]
             return (
-              <div key={type} style={{ marginBottom: '24px' }}>
-                <h4 style={{
-                  margin: '0 0 12px',
-                  color: cfg.color,
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
+              <div key={type} className="notification-group">
+                <h4 className="notification-group-title" style={{ color: cfg.color }}>
                   {cfg.icon} {cfg.label} ({typeNotifications.length})
                 </h4>
                 {typeNotifications.map(n => (
                   <div
                     key={n._id}
+                    className="notification-card"
                     style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '14px',
-                      padding: '14px 16px',
-                      marginBottom: '10px',
-                      borderRadius: '12px',
-                      border: `1px solid ${n.isRead ? '#e2e8f0' : cfg.color}`,
+                      borderColor: n.isRead ? '#e2e8f0' : cfg.color,
                       background: n.isRead ? '#fafafa' : cfg.bg,
-                      opacity: n.isRead ? 0.75 : 1,
-                      transition: 'all 0.2s'
+                      opacity: n.isRead ? 0.75 : 1
                     }}
                   >
                     {/* Icon */}
-                    <div style={{
-                      fontSize: '1.4rem',
-                      minWidth: '36px',
-                      height: '36px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: '50%',
-                      background: cfg.bg,
-                      border: `1.5px solid ${cfg.color}`
-                    }}>
+                    <div className="notification-icon" style={{ background: cfg.bg, borderColor: cfg.color }}>
                       {cfg.icon}
                     </div>
 
                     {/* Content */}
-                    <div style={{ flex: 1 }}>
+                    <div className="notification-content">
                       {!n.isRead && (
-                        <span style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: cfg.color,
-                          display: 'inline-block',
-                          marginBottom: '4px'
-                        }} />
+                        <span className="notification-unread-dot" style={{ background: cfg.color }} />
                       )}
                       {n.type === 'contact' && n.contactId ? (
-                        <div style={{ marginBottom: '8px' }}>
-                          <p style={{ margin: '0 0 4px', color: '#1f2937', fontSize: '0.9rem', fontWeight: 600 }}>
+                        <div className="notification-contact-details">
+                          <p className="notification-contact-name">
                             {n.contactId.name} ({n.contactId.email})
                           </p>
                           {n.contactId.phone && (
-                            <p style={{ margin: '0 0 4px', color: '#6b7280', fontSize: '0.85rem' }}>
-                              Phone: {n.contactId.phone}
-                            </p>
+                            <p className="notification-contact-meta">Phone: {n.contactId.phone}</p>
                           )}
                           {n.contactId.destination && (
-                            <p style={{ margin: '0 0 4px', color: '#6b7280', fontSize: '0.85rem' }}>
-                              Destination: {n.contactId.destination}
-                            </p>
+                            <p className="notification-contact-meta">Destination: {n.contactId.destination}</p>
                           )}
-                          <p style={{ margin: 0, color: '#1f2937', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                          <p className="notification-message">
                             Message: {n.contactId.message}
                           </p>
                         </div>
                       ) : (
-                        <p style={{ margin: 0, color: '#1f2937', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                        <p className="notification-message">
                           {n.message}
                         </p>
                       )}
-                      <p style={{ margin: '4px 0 0', color: '#9ca3af', fontSize: '0.78rem' }}>
+                      <p className="notification-meta">
                         {new Date(n.createdAt).toLocaleString()}
                       </p>
                     </div>
 
                     {/* Actions */}
-                    <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                    <div className="notification-action-group">
                       {!n.isRead && (
                         <button
                           onClick={() => handleMarkRead(n._id)}
                           title="Mark as read"
-                          style={{
-                            background: 'none',
-                            border: `1.5px solid ${cfg.color}`,
-                            borderRadius: '6px',
-                            color: cfg.color,
-                            padding: '4px 10px',
-                            cursor: 'pointer',
-                            fontSize: '0.78rem',
-                            fontWeight: 600,
-                            whiteSpace: 'nowrap'
-                          }}
+                          className="notification-action-btn notification-action-read"
+                          style={{ borderColor: cfg.color, color: cfg.color }}
                         >
                           Mark read
                         </button>
@@ -287,17 +204,7 @@ const NotificationsPanel = ({ onStatsChange }) => {
                       <button
                         onClick={() => handleDelete(n._id)}
                         title="Delete notification"
-                        style={{
-                          background: 'none',
-                          border: '1.5px solid #ef4444',
-                          borderRadius: '6px',
-                          color: '#ef4444',
-                          padding: '4px 10px',
-                          cursor: 'pointer',
-                          fontSize: '0.78rem',
-                          fontWeight: 600,
-                          whiteSpace: 'nowrap'
-                        }}
+                        className="notification-action-btn notification-action-delete"
                       >
                         Delete
                       </button>

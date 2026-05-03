@@ -55,7 +55,8 @@
 
 .dest-card-info {
   position: absolute; 
-  top: 24px; 
+  top: auto;
+  bottom: 92px;
   left: 24px; 
   right: 24px;
   z-index: 2;
@@ -69,6 +70,7 @@
   color: var(--white); 
   margin-bottom: 0;
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  overflow-wrap: anywhere;
 }
 
 .dest-card-price {
@@ -76,6 +78,22 @@
   color: var(--gold); 
   letter-spacing: 1px;
   font-weight: 500;
+}
+
+.pkg-tag {
+  position: absolute; 
+  top: 16px; 
+  left: 16px;
+  background: var(--gold); 
+  color: var(--black); 
+  font-size: 10px; 
+  font-weight: 700;
+  padding: 6px 12px; 
+  border-radius: 4px; 
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transform: translateZ(40px);
+  box-shadow: 0 4px 15px rgba(201,168,76,0.3);
 }
 
 .dest-card-arrow {
@@ -200,12 +218,25 @@
     gap: 16px;
   }
   .dest-card-3d { height: 320px; }
+  .dest-card-info {
+    bottom: 78px;
+    left: 18px;
+    right: 18px;
+  }
   .dest-card-name { font-size: 18px; }
+  .dest-card-actions {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
 }
 
 @media (max-width: 480px) {
   .dest-grid-3d { grid-template-columns: 1fr; }
   .dest-card-3d { height: 380px; }
+  .dest-card-info {
+    bottom: 78px;
+  }
 }
 
 /* Reduced motion support */

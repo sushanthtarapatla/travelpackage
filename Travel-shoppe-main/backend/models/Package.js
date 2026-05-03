@@ -32,6 +32,13 @@ const packageSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  recommendationTags: {
+    type: [{
+      type: String,
+      trim: true
+    }],
+    default: []
+  },
   itinerary: {
     type: [String],
     default: []

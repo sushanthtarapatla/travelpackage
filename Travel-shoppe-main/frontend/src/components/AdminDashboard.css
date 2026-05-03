@@ -268,6 +268,23 @@
   border-color: rgba(201, 168, 76, 0.4);
 }
 
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-section-spacing {
+  margin-top: 12px;
+}
+
+.booking-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .admin-card h3 {
   margin: 0 0 20px;
   color: var(--white);
@@ -329,6 +346,37 @@
   color: var(--muted);
 }
 
+.admin-tag-field {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-tag-chip {
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-tag-chip:hover,
+.admin-tag-chip.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-color: transparent;
+  color: var(--black);
+  transform: translateY(-1px);
+}
+
 /* Button Enhancements */
 .admin-actions {
   display: flex;
@@ -367,7 +415,184 @@
   box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
 }
 
-/* List Row Enhancements */
+.nav-notification-btn {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #ef4444;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  line-height: 1.4;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-list-button {
+  width: 100%;
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  color: var(--text);
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-list-button:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.admin-filter-tab {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(201, 168, 76, 0.4);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.admin-filter-tab.active {
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
+}
+
+.notification-filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.admin-status-text {
+  color: #6b7280;
+}
+
+.admin-empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: #9ca3af;
+}
+
+.admin-empty-icon {
+  font-size: 3rem;
+}
+
+.notification-group {
+  margin-bottom: 24px;
+}
+
+.notification-group-title {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+
+.notification-icon {
+  font-size: 1.4rem;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.notification-contact-details {
+  margin-bottom: 8px;
+}
+
+.notification-contact-name,
+.notification-message {
+  margin: 0;
+  color: #1f2937;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.notification-contact-name {
+  font-weight: 600;
+}
+
+.notification-contact-meta {
+  margin: 0 0 4px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.notification-meta {
+  margin: 4px 0 0;
+  color: #9ca3af;
+  font-size: 0.78rem;
+}
+
+.notification-action-group {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.notification-action-btn {
+  background: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.notification-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.notification-action-delete {
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+}
+
 .admin-list-row {
   border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 12px;

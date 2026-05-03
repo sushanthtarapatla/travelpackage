@@ -16,6 +16,10 @@ const destinationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  tag: {
+    type: String,
+    default: ''
+  },
   price: {
     type: String,
     required: true
@@ -43,6 +47,13 @@ const destinationSchema = new mongoose.Schema({
   recommendation: {
     type: String,
     default: ''
+  },
+  recommendationTags: {
+    type: [{
+      type: String,
+      trim: true
+    }],
+    default: []
   },
   featured: {
     type: Boolean,

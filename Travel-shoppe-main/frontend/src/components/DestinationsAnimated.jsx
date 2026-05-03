@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useDestinations, usePackages } from '../hooks/useApi';
 import { itineraries } from '../data/itineraries';
+import RecommendationBadges from './RecommendationBadges';
 import './Destinations.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -287,9 +288,7 @@ const DestinationsAnimated = () => {
                 alt={destination.name} 
                 loading="lazy" 
               />
-              {destination.recommendation && (
-                <div className="card-badge">{destination.recommendation}</div>
-              )}
+              <RecommendationBadges item={destination} />
             </div>
             <div className="dest-card-overlay"></div>
             <div className="dest-card-info">

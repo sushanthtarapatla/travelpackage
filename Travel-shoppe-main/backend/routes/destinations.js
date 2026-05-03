@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Destination = require('../models/Destination');
+const {
+  enrichWithDynamicTags,
+  normalizeRecommendationTagsPayload
+} = require('../utils/recommendationHelpers');
 
 // @desc    Get all destinations
 // @route   GET /api/destinations
 router.get('/', async (req, res) => {
   try {
     const destinations = await Destination.find().sort({ order: 1 });
+    const destinationsWithTags = await enrichWithDynamicTags(destinations, 'name', 'priceValue');
     res.json({
       success: true,
-      count: destinations.length,
-      data: destinations
+      count: destinationsWithTags.length,
+      data: destinationsWithTags
     });
   } catch (error) {
     res.status(500).json({
@@ -32,10 +37,12 @@ router.get('/:slug', async (req, res) => {
         message: 'Destination not found'
       });
     }
-    
+
+    const [destinationWithTags] = await enrichWithDynamicTags([destination], 'name', 'priceValue');
+
     res.json({
       success: true,
-      data: destination
+      data: destinationWithTags
     });
   } catch (error) {
     res.status(500).json({
@@ -49,7 +56,7 @@ router.get('/:slug', async (req, res) => {
 // @route   POST /api/destinations
 router.post('/', async (req, res) => {
   try {
-    const destination = await Destination.create(req.body);
+    const destination = await Destination.create(normalizeRecommendationTagsPayload(req.body));
     res.status(201).json({
       success: true,
       data: destination
@@ -66,7 +73,7 @@ router.post('/', async (req, res) => {
 // @route   PUT /api/destinations/:id
 router.put('/:id', async (req, res) => {
   try {
-    const destination = await Destination.findByIdAndUpdate(req.params.id, req.body, {
+    const destination = await Destination.findByIdAndUpdate(req.params.id, normalizeRecommendationTagsPayload(req.body), {
       new: true,
       runValidators: true
     });

@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { createPackage, deletePackage, getPackages, updatePackage } from '../services/api'
+import {
+  parseRecommendationTags,
+  recommendationTagSuggestions
+} from '../utils/recommendationTags'
 
 const initialForm = {
   name: '',
@@ -12,7 +16,8 @@ const initialForm = {
   itineraryImages: '',
   price: '',
   priceValue: '',
-  recommendation: ''
+  recommendation: '',
+  recommendationTags: ''
 }
 
 const ManagePackages = ({ onStatsChange }) => {
@@ -48,6 +53,18 @@ const ManagePackages = ({ onStatsChange }) => {
     setEditingId('')
   }
 
+  const addRecommendationTag = (tag) => {
+    setFormData((prev) => {
+      const tags = parseRecommendationTags(prev.recommendationTags)
+      if (tags.includes(tag)) return prev
+
+      return {
+        ...prev,
+        recommendationTags: [...tags, tag].join(', ')
+      }
+    })
+  }
+
   const handleEdit = (pkg) => {
     setEditingId(pkg._id)
     setFormData({
@@ -61,7 +78,8 @@ const ManagePackages = ({ onStatsChange }) => {
       itineraryImages: Array.isArray(pkg.itineraryImages) ? pkg.itineraryImages.join(', ') : '',
       price: pkg.price || '',
       priceValue: pkg.priceValue || '',
-      recommendation: pkg.recommendation || ''
+      recommendation: pkg.recommendation || '',
+      recommendationTags: Array.isArray(pkg.recommendationTags) ? pkg.recommendationTags.join(', ') : ''
     })
     setMessage('')
   }
@@ -91,7 +109,8 @@ const ManagePackages = ({ onStatsChange }) => {
       itineraryImages: formData.itineraryImages
         .split(',')
         .map((item) => item.trim())
-        .filter(Boolean)
+        .filter(Boolean),
+      recommendationTags: parseRecommendationTags(formData.recommendationTags)
     }
 
     try {
@@ -146,6 +165,29 @@ const ManagePackages = ({ onStatsChange }) => {
           value={formData.recommendation}
           onChange={handleChange}
         />
+        <div className="admin-tag-field">
+          <input
+            name="recommendationTags"
+            placeholder="Recommendation tags (e.g. Best Seller, Trending Now)"
+            value={formData.recommendationTags}
+            onChange={handleChange}
+          />
+          <div className="admin-tag-suggestions">
+            {recommendationTagSuggestions.map((tag) => {
+              const selected = parseRecommendationTags(formData.recommendationTags).includes(tag)
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  className={`admin-tag-chip${selected ? ' active' : ''}`}
+                  onClick={() => addRecommendationTag(tag)}
+                >
+                  {tag}
+                </button>
+              )
+            })}
+          </div>
+        </div>
         <input name="price" placeholder="Price text (e.g. ₹20,000)" value={formData.price} onChange={handleChange} required />
         <input
           type="number"

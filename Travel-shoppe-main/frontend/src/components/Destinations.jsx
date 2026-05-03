@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDestinations } from '../hooks/useApi';
+import RecommendationBadges from './RecommendationBadges';
 import './Destinations.css';
 
 const Destinations = () => {
@@ -48,16 +49,19 @@ const Destinations = () => {
             style={{ opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.6s ease, transform 0.6s ease' }}
           >
             <img src={destination.image} alt={destination.name} loading="lazy" />
+            <RecommendationBadges item={destination} />
             <div className="dest-card-overlay"></div>
             <div className="dest-card-info">
               <div className="dest-card-name">{destination.name}</div>
-              <div className="dest-card-price">{destination.price}</div>              <button
+              <div className="dest-card-price">{destination.price}</div>
+              <button
                 type="button"
                 className="btn-details"
                 onClick={() => navigate(`/destinations/${destination.slug}`)}
               >
                 View Details
-              </button>            </div>
+              </button>
+            </div>
             <div className="dest-card-arrow">→</div>
           </div>
         ))}

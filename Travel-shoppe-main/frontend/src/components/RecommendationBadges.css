@@ -1,0 +1,83 @@
+.recommendation-badges {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-start;
+  max-width: min(82%, calc(100% - 32px));
+  transform: translateZ(40px);
+  pointer-events: none;
+}
+
+.recommendation-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.recommendation-badge.gold {
+  background: linear-gradient(135deg, rgba(248, 200, 76, 0.95), rgba(183, 121, 31, 0.95));
+  color: #1d1203;
+}
+
+.recommendation-badge.red {
+  background: linear-gradient(135deg, rgba(255, 90, 106, 0.94), rgba(185, 28, 28, 0.94));
+}
+
+.recommendation-badge.green {
+  background: linear-gradient(135deg, rgba(54, 211, 153, 0.94), rgba(4, 120, 87, 0.94));
+}
+
+.recommendation-badge.purple {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.94), rgba(109, 40, 217, 0.94));
+}
+
+.recommendation-badge.blue {
+  background: linear-gradient(135deg, #60a5fa, #1d4ed8);
+}
+
+.recommendation-badge.orange {
+  background: linear-gradient(135deg, #fb923c, #c2410c);
+}
+
+.recommendation-badge.teal {
+  background: linear-gradient(135deg, #2dd4bf, #0f766e);
+}
+
+.recommendation-badge.neutral {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.86), rgba(75, 85, 99, 0.82));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 480px) {
+  .recommendation-badges {
+    top: 12px;
+    left: 12px;
+    gap: 5px;
+    max-width: calc(100% - 24px);
+  }
+
+  .recommendation-badge {
+    min-height: 21px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
